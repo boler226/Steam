@@ -1,34 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Steam.Data;
 using Steam.Data.Entities;
+using Steam.Interfaces;
 using Steam.Models.News;
 
 namespace Steam.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NewsController : ControllerBase
+    public class NewsController(AppEFContext context,
+        IValidator<NewsCreateViewModel> createValidator,
+        IMapper mapper,
+        IImageService imageService) : ControllerBase
     {
-        private readonly AppEFContext _context;
-
-        public NewsController(AppEFContext context)
-        {
-            _context = context;
-        }
-
         // Переглянути список новин
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return Ok(await _context.News.ToListAsync());
+            try
+            {
+                var news = await context.News
+                    .Select(n => new NewsItemViewModel
+                    {
+                        Id = n.Id,
+                        Title = n.Title,
+                        Description = n.Description,
+                        DateOfRelease = n.DateOfRelease,
+                        Image = n.Image,
+                        VideoURL = n.VideoURL,
+                        GameId = n.GameId
+                    }).ToListAsync();   
+                
+                return Ok(news);
+            }
+            catch (Exception) 
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         // Найти новину за id
         [HttpGet("find/{id}")]
         public async Task<IActionResult> Find(int? id)
         {
-            var newsEntity = await _context.News
+            var newsEntity = await context.News
                 .Include(n => n.Game)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -52,31 +70,33 @@ namespace Steam.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(NewsCreateViewModel model)
+        public async Task<IActionResult> Create([FromForm] NewsCreateViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var newsEntity = new NewsEntity
-                {
-                    Title = model.Title,
-                    Description = model.Description,
-                    DateOfRelease = model.DateOfRelease,
-                    Image = model.Image,
-                    VideoURL = model.VideoURL,
-                    GameId = model.GameId
-                };
+            var validationResult = await createValidator.ValidateAsync(model);
 
-                _context.News.Add(newsEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var news = mapper.Map<NewsEntity>(model);
+
+            try
+            {
+                news.Image = await imageService.SaveImageAsync(model.Image);
+                await context.News.AddAsync(news);
+                await context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(Create), new { id = news.Id}, news);
             }
-            return Ok(model);
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var newsEntity = await _context.News.FindAsync(id);
+            var newsEntity = await context.News.FindAsync(id);
             if (newsEntity == null)
             {
                 return NotFound();
@@ -106,7 +126,7 @@ namespace Steam.Controllers
 
             if (ModelState.IsValid)
             {
-                var newsEntity = await _context.News.FindAsync(id);
+                var newsEntity = await context.News.FindAsync(id);
                 if (newsEntity == null)
                 {
                     return NotFound();
@@ -119,7 +139,7 @@ namespace Steam.Controllers
                 newsEntity.VideoURL = model.VideoURL;
                 newsEntity.GameId = model.GameId;
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return Ok(model);
@@ -128,14 +148,14 @@ namespace Steam.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var newsEntity = await _context.News.FindAsync(id);
+            var newsEntity = await context.News.FindAsync(id);
             if(newsEntity == null)
             {
                 return NotFound();
             }
 
-            _context.News.Remove(newsEntity);
-            await _context.SaveChangesAsync();
+            context.News.Remove(newsEntity);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }
