@@ -16,8 +16,7 @@ namespace Steam.Models.News
         public DateTime DateOfRelease { get; set; }
 
         [Required]
-        [StringLength(500)]
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
 
         [Required]
         [StringLength(500)]
