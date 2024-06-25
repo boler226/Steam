@@ -48,6 +48,10 @@ namespace Steam.Mapper
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
                 .ForMember(dest => dest.GameImages, opt => opt.Ignore());
 
+            CreateMap<NewsEntity, NewsItemViewModel>();
+
+            CreateMap<NewsCreateViewModel, NewsEntity>()
+                .ForMember(dest => dest.Image, opt => opt.Ignore());
         }
     }
 }

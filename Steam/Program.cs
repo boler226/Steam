@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Steam.Data.Entities.Identity;
 using Steam.Interfaces;
 using Steam.Services;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,13 @@ builder.Services.AddScoped(provider => new MapperConfiguration(cfg =>
     cfg.AddProfile(new AppMapProfile(provider.GetService<AppEFContext>()));
 }).CreateMapper());
 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+builder.Services.AddAutoMapper(typeof(AppMapProfile));
+
+builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddTransient<IImageValidator, ImageValidator>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -78,7 +86,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+var dir = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["ImagesDir"]);
 
 if (!Directory.Exists(dir))
 {

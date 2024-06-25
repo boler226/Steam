@@ -18,23 +18,16 @@ namespace Steam.Controllers
     {
         // Переглянути список новин
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> List()
         {
             try
             {
-                var news = await context.News
-                    .Select(n => new NewsItemViewModel
-                    {
-                        Id = n.Id,
-                        Title = n.Title,
-                        Description = n.Description,
-                        DateOfRelease = n.DateOfRelease,
-                        Image = n.Image,
-                        VideoURL = n.VideoURL,
-                        GameId = n.GameId
-                    }).ToListAsync();   
-                
-                return Ok(news);
+                var list = await context.News
+                    .Where(n => !n.IsDeleted)
+                    .Select(e => mapper.Map<NewsItemViewModel>(e))
+                    .ToListAsync();
+
+                return Ok(list);
             }
             catch (Exception) 
             {
