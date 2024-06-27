@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Steam.Data;
@@ -23,8 +24,7 @@ namespace Steam.Controllers
             try
             {
                 var list = await context.News
-                    .Where(n => !n.IsDeleted)
-                    .Select(e => mapper.Map<NewsItemViewModel>(e))
+                    .ProjectTo<NewsItemViewModel>(mapper.ConfigurationProvider)
                     .ToListAsync();
 
                 return Ok(list);

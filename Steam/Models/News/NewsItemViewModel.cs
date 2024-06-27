@@ -1,4 +1,6 @@
-﻿namespace Steam.Models.News
+﻿using Steam.Models.Game;
+
+namespace Steam.Models.News
 {
     public class NewsItemViewModel
     {
@@ -9,6 +11,7 @@
         public string Image {  get; set; }
         public string VideoURL { get; set; }
         public int GameId { get; set; }
-     // public string GameName { get; set; }
+        public GameItemViewModel Game { get; set; } 
+        // public string GameName { get; set; }
     }
 }
