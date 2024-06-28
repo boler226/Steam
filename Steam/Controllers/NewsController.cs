@@ -75,6 +75,7 @@ namespace Steam.Controllers
             try
             {
                 news.Image = await imageService.SaveImageAsync(model.Image);
+                news.DateOfRelease = DateTime.UtcNow;
                 await context.News.AddAsync(news);
                 await context.SaveChangesAsync();
 
