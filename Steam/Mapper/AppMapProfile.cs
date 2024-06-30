@@ -52,6 +52,8 @@ namespace Steam.Mapper
 
             CreateMap<NewsCreateViewModel, NewsEntity>()
                 .ForMember(dest => dest.Image, opt => opt.Ignore());
+
+            CreateMap<NewsEntity, NewsEditViewModel>();
         }
     }
 }

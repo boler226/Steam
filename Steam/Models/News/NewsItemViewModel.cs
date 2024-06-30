@@ -12,6 +12,5 @@ namespace Steam.Models.News
         public string VideoURL { get; set; }
         public int GameId { get; set; }
         public GameItemViewModel Game { get; set; } 
-        // public string GameName { get; set; }
     }
 }

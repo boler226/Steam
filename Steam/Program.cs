@@ -11,6 +11,8 @@ using Steam.Data.Entities.Identity;
 using Steam.Interfaces;
 using Steam.Services;
 using FluentValidation;
+using Steam.Services.ControllerServices.Interfaces;
+using Steam.Services.ControllerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +79,10 @@ builder.Services.AddAutoMapper(typeof(AppMapProfile));
 
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
+
+builder.Services.AddTransient<INewsControllerService, NewsControllerService>();
+
+builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 
 var app = builder.Build();
 
