@@ -7,15 +7,19 @@ using Steam.Data;
 using Steam.Data.Entities;
 using Steam.Interfaces;
 using Steam.Models.News;
+using Steam.Services.ControllerServices.Interfaces;
 
 namespace Steam.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class NewsController(AppEFContext context,
         IValidator<NewsCreateViewModel> createValidator,
+        IValidator<NewsEditViewModel> editValidator,
         IMapper mapper,
-        IImageService imageService) : ControllerBase
+        IImageService imageService,
+        INewsControllerService service
+        ) : ControllerBase
     {
         // Переглянути список новин
         [HttpGet]
@@ -29,37 +33,31 @@ namespace Steam.Controllers
 
                 return Ok(list);
             }
-            catch (Exception) 
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, ex.Message);
             }
         }
 
         // Найти новину за id
         [HttpGet("find/{id}")]
-        public async Task<IActionResult> Find(int? id)
+        public async Task<IActionResult> Find(int id)
         {
-            var newsEntity = await context.News
-                .Include(n => n.Game)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (newsEntity == null)
+            try
             {
-                return NotFound();
+                var news = await context.News
+                    .ProjectTo<NewsItemViewModel>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (news is null)
+                    return NotFound();
+
+                return Ok(news);
             }
-
-            var model = new NewsItemViewModel
+            catch (Exception ex)
             {
-                Id = newsEntity.Id,
-                Title = newsEntity.Title,
-                Description = newsEntity.Description,
-                DateOfRelease = newsEntity.DateOfRelease,
-                Image = newsEntity.Image,
-                VideoURL = newsEntity.VideoURL,
-                GameId = newsEntity.GameId
-            };
-
-            return Ok(model);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -70,87 +68,50 @@ namespace Steam.Controllers
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var news = mapper.Map<NewsEntity>(model);
+            try
+            {
+                await service.CreateAsync(model);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> Edit([FromForm] NewsEditViewModel model)
+        {
+            var validationResult = await editValidator.ValidateAsync(model);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
 
             try
             {
-                news.Image = await imageService.SaveImageAsync(model.Image);
-                news.DateOfRelease = DateTime.UtcNow;
-                await context.News.AddAsync(news);
-                await context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(Create), new { id = news.Id}, news);
+                await service.UpdateAsync(model);
+                return Ok();
             }
-            catch (Exception)
+            catch(Exception ex) 
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, ex.Message);
             }
-        }
-
-        [HttpGet("edit/{id}")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var newsEntity = await context.News.FindAsync(id);
-            if (newsEntity == null)
-            {
-                return NotFound();
-            }
-
-            var model = new NewsEditViewModel
-            {
-                Id = newsEntity.Id,
-                Title = newsEntity.Title,
-                Description = newsEntity.Description,
-                DateOfRelease = newsEntity.DateOfRelease,
-                Image = newsEntity.Image,
-                VideoURL = newsEntity.VideoURL,
-                GameId = newsEntity.GameId
-            };
-
-            return Ok(model);
-        }
-
-        [HttpPut("edit/{id}")]
-        public async Task<IActionResult> Edit(int id, NewsEditViewModel model)
-        {
-            if (id != model.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                var newsEntity = await context.News.FindAsync(id);
-                if (newsEntity == null)
-                {
-                    return NotFound();
-                }
-
-                newsEntity.Title = model.Title;
-                newsEntity.Description = model.Description;
-                newsEntity.DateOfRelease = model.DateOfRelease;
-                newsEntity.Image = model.Image;
-                newsEntity.VideoURL = model.VideoURL;
-                newsEntity.GameId = model.GameId;
-
-                await context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return Ok(model);
         }
 
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var newsEntity = await context.News.FindAsync(id);
-            if(newsEntity == null)
+            try
             {
-                return NotFound();
+                await service.DeleteIfExistsAsync(id);
+                return Ok();
             }
-
-            context.News.Remove(newsEntity);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

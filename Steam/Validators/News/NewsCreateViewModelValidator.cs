@@ -6,8 +6,12 @@ namespace Steam.Validators.News
 {
     public class NewsCreateViewModelValidator : AbstractValidator<NewsCreateViewModel>
     {
-        public NewsCreateViewModelValidator(IImageValidator imageValidator) 
+        public NewsCreateViewModelValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
         {
+            RuleFor(g => g.GameId)
+                .MustAsync(checker.IsCorrectGameId)
+                .WithMessage("Game with this id is not exists");
+
             RuleFor(i => i.Title)
                 .NotEmpty()
                 .WithMessage("Title is required.")
