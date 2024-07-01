@@ -24,8 +24,14 @@ namespace Steam.Validators.News
                 .MaximumLength(4000)
                     .WithMessage("Description is too long");
 
-            RuleFor(i => i.Image).MustAsync(imageValidator.IsValidImageAsync)
+            RuleFor(i => i.Image)
+                .NotNull()
+                .WithMessage("Image is required.")
+                .DependentRules(() =>
+                {
+                    RuleFor(i => i.Image).MustAsync(imageValidator.IsValidImageAsync)
                     .WithMessage("Image is not valid.");
+                });
 
         }
     }
