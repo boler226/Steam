@@ -16,6 +16,7 @@ const NewsListPage = () => {
             .then(resp => {
                 setData(resp.data);
             });
+
     };
 
     return (
