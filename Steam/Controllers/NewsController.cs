@@ -18,7 +18,8 @@ namespace Steam.Controllers
         IValidator<NewsEditViewModel> editValidator,
         IMapper mapper,
         IImageService imageService,
-        INewsControllerService service
+        INewsControllerService service,
+        IConfiguration configuration
         ) : ControllerBase
     {
         // Переглянути список новин
@@ -68,8 +69,11 @@ namespace Steam.Controllers
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
+            var news = mapper.Map<NewsEntity>(model);
+
             try
             {
+                news.Image = await imageService.SaveImageAsync(model.Image);
                 await service.CreateAsync(model);
                 return Ok();
             }
