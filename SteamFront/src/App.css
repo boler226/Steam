@@ -1,0 +1,30 @@
+.layout {
+  min-height: 100vh;
+  background: #353c4e;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  background-color: #171D25;
+  border-radius: 10px;
+}
+
+.button-header {
+  color: #C5C3C0;
+  font-size: 30px;
+  font-family: Arial;
+}
+
+.site-layout-content {
+  background: #fff;
+  min-height: 280px;
+}
+
+.footer {
+  background: #171D25;
+  text-align: center;
+  color: #C5C3C0;
+}

@@ -1,0 +1,17 @@
+
+
+.news-container {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрування по горизонталі */
+  justify-content: center; /* Центрування по вертикалі */
+  gap: 16px;
+  padding: 16px;
+}
+
+.news-card {
+  width: 1500px;
+  padding: 10px;
+  height: 350px;
+}
