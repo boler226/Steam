@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Bogus.DataSets;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Steam.Data;
@@ -10,94 +12,58 @@ using Steam.Models.News;
 
 namespace Steam.Controllers
 {
-    [Route("api/[controller]")]
-    public class GamesController : ControllerBase
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class GamesController(AppEFContext context,
+        IValidator<GameCreateViewModel> createValidator,
+        IMapper mapper
+        ) : ControllerBase
     {
-        private readonly AppEFContext _context;
-        private readonly IMapper _mapper;
-
-        public GamesController(AppEFContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
-
         // Переглянути список ігор
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> List()
         {
-            var games = await _context.Games
-                                      .Include(g => g.GameCategories)
-                                      .ThenInclude(gc => gc.Category)
-                                      .ToListAsync();
-            var gameViewModels = _mapper.Map<List<GameItemViewModel>>(games);
-            return Ok(gameViewModels);
+            var list = await context.Games
+                .ProjectTo<GameItemViewModel>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return Ok(list);
         }
 
         // Найти ігру за id
         [HttpGet("find/{id}")]
-        public async Task<IActionResult> Find(int? id)
+        public async Task<IActionResult> Find(int id)
         {
-            var gameEntity = await _context.Games
-                .Include(g => g.GameCategories)
-                .ThenInclude (gc => gc.Category)
-                .Include(g => g.GameImages)
-                .Include(g => g.News)
+            var game = await context.Games
+                .ProjectTo<GameItemViewModel>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if(gameEntity == null)
-            {
+            if(game is null)
                 return NotFound();
-            }
 
-           var model = _mapper.Map<GameItemViewModel>(gameEntity);
-            return Ok(model);
+            return Ok(game);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(GameCreateViewModel model)
+        public async Task<IActionResult> Create([FromForm] GameCreateViewModel model)
         {
-            if (ModelState.IsValid)
+            var validatorResult = await createValidator.ValidateAsync(model);
+
+            if (!validatorResult.IsValid)
+                return BadRequest(validatorResult.Errors);
+
+            try
             {
-                var gameEntity = _mapper.Map<GameEntity>(model);
-
-                _context.Add(gameEntity);
-                await _context.SaveChangesAsync();
-
-                if(model.SelectedCategoryIds != null)
-                {
-                    foreach(var categoryId in model.SelectedCategoryIds)
-                    {
-                        _context.GameCategory.Add(new GameCategoryEntity
-                        {
-                            GameId = gameEntity.Id,
-                            CategoryId = categoryId
-                        });
-                    }
-                }
-
-                if(model.ImageUrls != null)
-                {
-                    foreach(var imageUrl in model.ImageUrls)
-                    {
-                        _context.GameImages.Add(new GameImageEntity
-                        {
-                            GameId = gameEntity.Id,
-                            Name = imageUrl
-                        });
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await 
             }
+
             return Ok(model);
         }
 
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
-            var gameEntity = await _context.Games
+            var gameEntity = await context.Games
                 .Include(g => g.GameCategories)
                 .Include(g => g.GameImages)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -107,7 +73,7 @@ namespace Steam.Controllers
                 return NotFound();
             }
 
-            var model = _mapper.Map<GameEditViewModel>(gameEntity);
+            var model = mapper.Map<GameEditViewModel>(gameEntity);
             model.SelectedCategoryIds = gameEntity.GameCategories.Select(gc => gc.CategoryId).ToList();
             model.ImageUrls = gameEntity.GameImages.Select(gi => gi.Name).ToList();     
 
@@ -121,7 +87,7 @@ namespace Steam.Controllers
             {
                 try
                 {
-                    var gameEntity = await _context.Games
+                    var gameEntity = await context.Games
                         .Include(g => g.GameCategories)
                         .Include(g => g.GameImages)
                         .FirstOrDefaultAsync(m => m.Id == id);
@@ -131,17 +97,17 @@ namespace Steam.Controllers
                         return NotFound();
                     }
 
-                    _mapper.Map(model, gameEntity);
+                    mapper.Map(model, gameEntity);
 
                     // Оновлення категорій 
                     var existingCategories = gameEntity.GameCategories.ToList();
-                    _context.GameCategory.RemoveRange(existingCategories);
+                    context.GameCategory.RemoveRange(existingCategories);
 
                    if(model.SelectedCategoryIds != null)
                    {
                         foreach(var categoryId in model.SelectedCategoryIds)
                         {
-                            _context.GameCategory.Add(new GameCategoryEntity
+                            context.GameCategory.Add(new GameCategoryEntity
                             {
                                 GameId = gameEntity.Id,
                                 CategoryId = categoryId
@@ -151,13 +117,13 @@ namespace Steam.Controllers
 
                     // Оновлення фото
                     var existingImages = gameEntity.GameImages.ToList();
-                    _context.GameImages.RemoveRange(existingImages);
+                    context.GameImages.RemoveRange(existingImages);
 
                     if(model.ImageUrls != null)
                     {
                         foreach (var imageUrl in model.ImageUrls)
                         {
-                            _context.GameImages.Add(new GameImageEntity
+                            context.GameImages.Add(new GameImageEntity
                             {
                                 GameId = gameEntity.Id,
                                 Name = imageUrl
@@ -165,8 +131,8 @@ namespace Steam.Controllers
                         }
                     }
 
-                    _context.Update(gameEntity);
-                    await _context.SaveChangesAsync();
+                    context.Update(gameEntity);
+                    await context.SaveChangesAsync();
                 }
                 // Виняток, викликаний DbContext , коли очікувалося, що SaveChanges для
                 // сутності призведе до оновлення бази даних, але насправді рядки в базі
@@ -190,20 +156,20 @@ namespace Steam.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
-            var gameEntity = await _context.Games.FirstOrDefaultAsync();
+            var gameEntity = await context.Games.FirstOrDefaultAsync();
             if(gameEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Games.Remove(gameEntity);
-            await _context.SaveChangesAsync();
+            context.Games.Remove(gameEntity);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GameExists(int id)
         {
-            return _context.Games.Any(e => e.Id == id);
+            return context.Games.Any(e => e.Id == id);
         }
     }
 }

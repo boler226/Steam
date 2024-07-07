@@ -18,27 +18,7 @@ namespace Steam.Mapper
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel, CategoryEntity>();
 
-            CreateMap<GameEntity, GameItemViewModel>()
-                      .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.GameCategories.Select(gc => new CategoryItemViewModel
-                      {
-                          Id = gc.Category.Id,
-                          Name = gc.Category.Name
-                      })))
-                      .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.GameImages.Select(gi => new GameImageViewModel
-                      {
-                          Id = gi.Id,
-                          Name = gi.Name,
-                          Priority = gi.Priority
-                      })))
-                      .ForMember(dest => dest.News, opt => opt.MapFrom(src => src.News.Select(n => new NewsItemViewModel
-                      {
-                          Id = n.Id,
-                          Title = n.Title,
-                          Description = n.Description,
-                          DateOfRelease = n.DateOfRelease,
-                          Image = n.Image,
-                          VideoURL = n.VideoURL
-                      })));
+            CreateMap<GameEntity, GameItemViewModel>();
 
             CreateMap<GameCreateViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
