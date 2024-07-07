@@ -27,7 +27,7 @@ const NewsListPage = () => {
     };
 
     return (
-        <Layout className="layout">
+        <Layout style={{ backgroundColor: '#282B31' }}>
             <Content className="news-container">
                 <Flex vertical justify='space-around' align='center' gap={50}>
                     {data.map((item) => (
@@ -38,7 +38,7 @@ const NewsListPage = () => {
                             <Card hoverable className="news-card-inner">
                                 <Flex justify='space-between'>
                                     <div className="news-content">
-                                        <Flex vertical justify='space-between' align='flex-start' gap='small' style={{height: '250px'}}>
+                                        <Flex vertical justify='space-between' align='flex-start' gap='small' style={{height: '200px'}}>
                                                 <p className="news-title">{item.title}</p>
                                                 <p className="news-text">{item.description}</p>
                                                 <Flex justify='space-between' gap='50%'>

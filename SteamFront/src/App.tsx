@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <Router>
-        <Layout className="layout">
+        <Layout style={{ backgroundColor: '#353c4e' }}>
             <Header className="header">
                 <Row justify='center' align='middle' gutter={20}>
                     <Col style={{marginRight: 100}}>
