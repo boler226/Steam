@@ -4,6 +4,7 @@ using Steam.Interfaces;
 using Steam.Services.ControllerServices.Interfaces;
 using Steam.Models.Game;
 using Steam.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Steam.Services.ControllerServices
 {
@@ -30,6 +31,36 @@ namespace Steam.Services.ControllerServices
             catch (Exception ex)
             {
                 throw new Exception("Error while creating the game", ex);
+            }
+        }
+
+        public async Task UpdateAsync(GameEditViewModel model)
+        {
+            var game = await context.Games.FirstOrDefaultAsync(g => g.Id == model.Id);
+
+            try
+            {
+                if (game is null)
+                    throw new Exception("Game not found.");
+
+                var oldImages = game.GameImages;
+
+                if (model.Name != null)
+                    game.Name = model.Name;
+
+                if (model.SystemRequirements != null)
+                    game.SystemRequirements = model.SystemRequirements;
+
+                if (model.Images != null)
+                {
+                    var gameImages = await imageService.SaveImagesAsync(model.Images);
+                   
+                }
+            }
+            catch (Exception)
+            {
+                
+                throw new Exception("Error news update!");
             }
         }
     }

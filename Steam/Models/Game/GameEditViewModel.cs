@@ -18,6 +18,6 @@ namespace Steam.Models.Game
         public string SystemRequirements { get; set; }
 
         public List<int> SelectedCategoryIds { get; set; }
-        public List<string> ImageUrls { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; }
     }
 }

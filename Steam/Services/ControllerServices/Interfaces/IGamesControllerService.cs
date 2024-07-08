@@ -5,5 +5,6 @@ namespace Steam.Services.ControllerServices.Interfaces
     public interface IGamesControllerService
     {
         Task CreateAsync(GameCreateViewModel model);
+        Task UpdateAsync(GameEditViewModel model);
     }
 }

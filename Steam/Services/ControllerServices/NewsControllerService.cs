@@ -39,8 +39,8 @@ namespace Steam.Services.ControllerServices
 
             try
             {
-                if (news == null)
-                    throw new Exception("News not found");
+                if (news is null)
+                    throw new Exception("News not found.");
 
                 var oldImage = news.Image;
 
