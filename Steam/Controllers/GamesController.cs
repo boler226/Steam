@@ -9,6 +9,7 @@ using Steam.Data.Entities;
 using Steam.Models.Category;
 using Steam.Models.Game;
 using Steam.Models.News;
+using Steam.Services.ControllerServices.Interfaces;
 
 namespace Steam.Controllers
 {
@@ -16,7 +17,8 @@ namespace Steam.Controllers
     [ApiController]
     public class GamesController(AppEFContext context,
         IValidator<GameCreateViewModel> createValidator,
-        IMapper mapper
+        IMapper mapper,
+        IGamesControllerService service
         ) : ControllerBase
     {
         // Переглянути список ігор
@@ -52,12 +54,8 @@ namespace Steam.Controllers
             if (!validatorResult.IsValid)
                 return BadRequest(validatorResult.Errors);
 
-            try
-            {
-                await 
-            }
-
-            return Ok(model);
+            await service.CreateAsync(model);
+            return Ok();
         }
 
         [HttpGet("edit/{id}")]
