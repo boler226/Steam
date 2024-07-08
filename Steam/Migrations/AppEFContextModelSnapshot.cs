@@ -132,7 +132,7 @@ namespace Steam.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tblCategory");
+                    b.ToTable("tblCategory", (string)null);
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.GameCategoryEntity", b =>
@@ -147,7 +147,7 @@ namespace Steam.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("tblGameCategory");
+                    b.ToTable("tblGameCategory", (string)null);
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.GameEntity", b =>
@@ -184,7 +184,7 @@ namespace Steam.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tblGame");
+                    b.ToTable("tblGame", (string)null);
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.GameImageEntity", b =>
@@ -213,7 +213,7 @@ namespace Steam.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("tblGameImage");
+                    b.ToTable("tblGameImage", (string)null);
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.Identity.RoleEntity", b =>
@@ -382,7 +382,7 @@ namespace Steam.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("tblNews");
+                    b.ToTable("tblNews", (string)null);
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.UserGameEntity", b =>
@@ -397,7 +397,7 @@ namespace Steam.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("tblUserGame");
+                    b.ToTable("tblUserGame", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

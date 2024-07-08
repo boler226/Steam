@@ -81,6 +81,7 @@ builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 
 builder.Services.AddTransient<INewsControllerService, NewsControllerService>();
+builder.Services.AddTransient<IGamesControllerService, GamesControllerService>();
 
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 
