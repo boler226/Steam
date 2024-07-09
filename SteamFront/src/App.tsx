@@ -1,4 +1,5 @@
-import { Layout, Col, Row, Button, Image } from 'antd';
+import { Layout, Col, Row, Image, Space, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import NewsListPage from './components/news/NewsListPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -11,31 +12,46 @@ const App = () => {
     <Router>
         <Layout style={{ backgroundColor: '#353c4e' }}>
             <Header className="header">
-                <Row justify='center' align='middle' gutter={20}>
-                    <Col style={{marginRight: 100}}>
-                        <Image height={55} preview={false} src='https://store.akamai.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016'></Image>
-                    </Col>
-                    <Col>
-                        <Button className="button-header" type='text'>Магазин</Button>
-                    </Col>
-                    <Col>
-                        <Button className="button-header" type='text'>Спільнота</Button>
-                    </Col>
-                    <Col>
-                        <Button className="button-header" type='text'>Player</Button>
-                    </Col>
-                    <Col>
-                        <Button className="button-header" type='text'>Чат</Button>
-                    </Col>
-                    <Col>
-                        <Button className="button-header" type='text'>Підтримка</Button>
-                    </Col>
-                </Row>
+                    <Row justify='center' align='middle' gutter={20}>
+                        <Col style={{marginRight: 100}}>
+                            <Image height={45} preview={false} src='https://store.akamai.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016'></Image>
+                        </Col>
+                        <Col>
+                            <button className="button-header">Магазин</button>
+                        </Col>
+                        <Col>
+                            <button className="button-header">Спільнота</button>
+                        </Col>
+                        <Col>
+                            <button className="button-header">Player</button>
+                        </Col>
+                        <Col>
+                            <button className="button-header">Чат</button>
+                        </Col>
+                        <Col>
+                            <button className="button-header">Підтримка</button>
+                        </Col>
+                    </Row>
             </Header>
 
-            <Content className="site-layout-content" style={{margin: '0 10px 0 10px'}}>
+            <Content className="site-layout-content" >
+                <div className="site-router">
+                    <Space style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Space>
+                            <button className="button-router">Нові й варті уваги</button>
+                            <button className="button-router">Новини</button>
+                            <button className="button-router">Категорії</button>
+                        </Space>
+                        <Input
+                            placeholder="пошук"
+                            prefix={<SearchOutlined />}
+                            style={{ width: 200, height: '30px', background: '#316282', border: 'none', color: '#C5C3C0' }}
+                        />
+                    </Space>
+                </div>
+
                     <Routes>
-                        <Route path="/" element={<NewsListPage />} />
+                        <Route path="/news" element={<NewsListPage />} />
                         {/*<Route path="/addNews" element={<NewsAddComponent />} />*/}
                         {/*<Route path="/listNews" element={<NewsListComponent />} />*/}
                     </Routes>
