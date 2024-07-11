@@ -6,5 +6,6 @@ namespace Steam.Services.ControllerServices.Interfaces
     {
         Task CreateAsync(GameCreateViewModel model);
         Task UpdateAsync(GameEditViewModel model);
+        Task DeleteIfExistsAsync(int id);
     }
 }

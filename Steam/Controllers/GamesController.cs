@@ -80,7 +80,7 @@ namespace Steam.Controllers
             }
         }
 
-        [HttpPatch("edit")]
+        [HttpPatch]
         public async Task<IActionResult> Edit([FromForm] GameEditViewModel model)
         {
             try
@@ -100,23 +100,19 @@ namespace Steam.Controllers
             }
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var gameEntity = await context.Games.FirstOrDefaultAsync();
-            if(gameEntity == null)
+            try
             {
-                return NotFound();
+                await service.DeleteIfExistsAsync(id);
+
+                return Ok();
             }
-
-            context.Games.Remove(gameEntity);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool GameExists(int id)
-        {
-            return context.Games.Any(e => e.Id == id);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

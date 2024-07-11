@@ -53,7 +53,7 @@ namespace Steam.Services.ControllerServices
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while creating the game", ex);
+                throw new Exception("Error while creating the game!", ex);
             }
         }
 
@@ -65,8 +65,6 @@ namespace Steam.Services.ControllerServices
             {
                 if (game is null)
                     throw new Exception("Game not found.");
-
-           
 
                 if (model.Name != null)
                     game.Name = model.Name;
@@ -114,10 +112,30 @@ namespace Steam.Services.ControllerServices
                 context.Games.Update(game);
                 await context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
-                throw new Exception("Error news update!");
+                throw new Exception("Error game update!", ex);
+            }
+        }
+
+        public async Task DeleteIfExistsAsync(int id)
+        {
+            var game = await context.Games.FirstOrDefaultAsync(i => i.Id == id);
+
+            try
+            {
+                if (game is null)
+                    throw new Exception("Game not found!");
+
+                foreach (var image in game.GameImages)
+                    imageService.DeleteImageIfExists(image.Name);
+
+                context.Games.Remove(game);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error game delete!", ex);
             }
         }
     }
