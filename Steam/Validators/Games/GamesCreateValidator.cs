@@ -4,37 +4,37 @@ using Steam.Models.Game;
 
 namespace Steam.Validators.Games
 {
-    public class GamesCreateViewModelValidator : AbstractValidator<GameCreateViewModel>
+    public class GamesCreateValidator : AbstractValidator<GameCreateViewModel>
     {
-        public GamesCreateViewModelValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
+        public GamesCreateValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
         {
             RuleFor(i => i.Name)
                 .NotEmpty()
-                .WithMessage("Name is required.")
+                    .WithMessage("Name is required.")
                 .MaximumLength(50)
-                .WithMessage("Name cannot be longer than 50 characters.");
+                    .WithMessage("Name cannot be longer than 50 characters.");
 
             RuleFor(i => i.Price)
                 .NotEmpty()
-                .WithMessage("Price is required.");
+                    .WithMessage("Price is required.");
 
             RuleFor(i => i.Description)
                 .NotEmpty()
-                .WithMessage("Description is required.")
+                    .WithMessage("Description is required.")
                 .MaximumLength(4000)
-                .WithMessage("Description cannot be longer than 4000 characters.");
+                    .WithMessage("Description cannot be longer than 4000 characters.");
 
             RuleFor(i => i.DateOfRelease)
                .NotEmpty()
-               .WithMessage("Date of release is required.");
+                    .WithMessage("Date of release is required.");
 
             RuleFor(i => i.SystemRequirements)
                 .NotEmpty()
-                .WithMessage("System requirements is required.")
+                    .WithMessage("System requirements is required.")
                 .MaximumLength(1000)
-                .WithMessage("System requirements cannot be longer than 1000 characters.");
+                    .WithMessage("System requirements cannot be longer than 1000 characters.");
 
-            RuleFor(g => g.SelectedCategoryIds)
+            RuleFor(g => g.CategoryIds)
                 .MustAsync(async (ids, cancellationToken) =>
                 {
                     foreach (var id in ids)
@@ -46,13 +46,13 @@ namespace Steam.Validators.Games
                 })
                 .WithMessage("One or more selected category ids are invalid");
 
-            RuleFor(i => i.ImageUrls)
+            RuleFor(i => i.Images)
                 .NotNull()
-                .WithMessage("Image is required.")
+                    .WithMessage("Image is required.")
                 .DependentRules(() =>
                 {
-                    RuleFor(i => i.ImageUrls).MustAsync(imageValidator.IsValidImagesAsync)
-                    .WithMessage("One or more selected images are invalid");
+                    RuleFor(i => i.Images).MustAsync(imageValidator.IsValidImagesAsync)
+                        .WithMessage("One or more selected images are invalid");
                 });
         }
     }
