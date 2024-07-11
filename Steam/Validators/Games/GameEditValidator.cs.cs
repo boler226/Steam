@@ -18,6 +18,12 @@ namespace Steam.Validators.Games
                 .MaximumLength(50)
                     .WithMessage("Name cannot be longer than 50 characters.");
 
+            RuleFor(i => i.Price)
+                .NotNull()
+                    .WithMessage("Price is required.")
+                .GreaterThanOrEqualTo(0)
+                    .WithMessage("Price cannot be negative.");
+
             RuleFor(g => g.Description)
                  .MaximumLength(4000)
                     .WithMessage("Description cannot be longer than 4000 characters.");

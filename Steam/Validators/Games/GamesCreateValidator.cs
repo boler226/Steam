@@ -15,18 +15,16 @@ namespace Steam.Validators.Games
                     .WithMessage("Name cannot be longer than 50 characters.");
 
             RuleFor(i => i.Price)
-                .NotEmpty()
-                    .WithMessage("Price is required.");
+                .NotNull()
+                    .WithMessage("Price is required.")
+                .GreaterThanOrEqualTo(0)
+                    .WithMessage("Price cannot be negative.");
 
             RuleFor(i => i.Description)
                 .NotEmpty()
                     .WithMessage("Description is required.")
                 .MaximumLength(4000)
                     .WithMessage("Description cannot be longer than 4000 characters.");
-
-            RuleFor(i => i.DateOfRelease)
-               .NotEmpty()
-                    .WithMessage("Date of release is required.");
 
             RuleFor(i => i.SystemRequirements)
                 .NotEmpty()
