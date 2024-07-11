@@ -9,7 +9,7 @@ namespace Steam.Models.Game
         public string Description { get; set; }
         public DateTime DateOfRelease { get; set; }
         public string SystemRequirements { get; set; }
-        public List<int> SelectedCategoryIds { get; set; }
-        public IEnumerable<IFormFile> ImageUrls { get; set; }
+        public List<int> CategoryIds { get; set; }
+        public IEnumerable<IFormFile> Images { get; set; }
     }
 }

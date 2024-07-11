@@ -20,10 +20,33 @@ namespace Steam.Services.ControllerServices
 
             try
             {
-                var gameImages = await imageService.SaveImagesAsync(model.ImageUrls);
-                game.GameImages = gameImages.Select(name => new GameImageEntity { Name = name }).ToList();
+                game.DateOfRelease = DateTime.UtcNow;
+                game.Name = model.Name;
+                game.Description = model.Description;
+                game.Price = model.Price;
+                game.SystemRequirements = model.SystemRequirements;
 
-                game.GameCategories = model.SelectedCategoryIds.Select(id => new GameCategoryEntity { CategoryId = id }).ToList();
+                if(model.Images != null && model.Images.Any())
+                {
+                    foreach (var image in model.Images)
+                    {
+                        game.GameImages.Add(new GameImageEntity
+                        {
+                            Name = await imageService.SaveImageAsync(image),
+                        });
+                    }
+                }
+
+                if (model.CategoryIds != null && model.CategoryIds.Any())
+                {
+                    foreach (var categoryId in model.CategoryIds)
+                    {
+                        game.GameCategories.Add(new GameCategoryEntity
+                        {
+                            CategoryId = categoryId
+                        });
+                    }
+                }
 
                 context.Games.Add(game);
                 await context.SaveChangesAsync();
@@ -43,19 +66,53 @@ namespace Steam.Services.ControllerServices
                 if (game is null)
                     throw new Exception("Game not found.");
 
-                var oldImages = game.GameImages;
+           
 
                 if (model.Name != null)
                     game.Name = model.Name;
 
+                if (model.Price != null)
+                    game.Price = model.Price;
+
+                if (model.Description != null)
+                    game.Description = model.Description;
+
                 if (model.SystemRequirements != null)
                     game.SystemRequirements = model.SystemRequirements;
 
-                if (model.Images != null)
+                if (model.Images.Any() && model.Images != null)
                 {
-                    var gameImages = await imageService.SaveImagesAsync(model.Images);
-                   
+                    foreach (var image in game.GameImages)
+                        imageService.DeleteImageIfExists(image.Name);
+
+                    game.GameImages.Clear();
                 }
+
+                if (model.Images != null && model.Images.Any())
+                {
+                    //int priorityIndex = 1;
+                    foreach (var image in model.Images)
+                    {
+                        game.GameImages.Add(new GameImageEntity {
+                            Name = await imageService.SaveImageAsync(image),
+                        });
+                    }
+                }
+
+                if (model.CategoryIds != null && model.CategoryIds.Any())
+                {
+                    game.GameCategories.Clear();
+                    foreach (var category in model.CategoryIds)
+                    {
+                        game.GameCategories.Add(new GameCategoryEntity
+                        {
+                            CategoryId = category
+                        });
+                    }
+                }
+
+                context.Games.Update(game);
+                await context.SaveChangesAsync();
             }
             catch (Exception)
             {
