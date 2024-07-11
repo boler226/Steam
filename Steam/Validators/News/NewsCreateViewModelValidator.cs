@@ -24,10 +24,6 @@ namespace Steam.Validators.News
                 .MaximumLength(4000)
                 .WithMessage("Description cannot be longer than 4000 characters.");
 
-            RuleFor(i => i.DateOfRelease)
-                .NotEmpty()
-                .WithMessage("Date of release is required.");
-
             RuleFor(i => i.Image)
                 .NotNull()
                 .WithMessage("Image is required.")
