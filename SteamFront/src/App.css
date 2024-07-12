@@ -1,25 +1,67 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .layout {
+<<<<<<< Updated upstream
   min-height: 100vh;
+=======
+  min-height: 1080px;
   background: #353c4e;
+>>>>>>> Stashed changes
 }
 
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px;
+  height: 100px;
   background-color: #171D25;
-  border-radius: 10px;
+
+}
+
+.site-router {
+  display: flex;
+  justify-content: center;
+  height: 36px;
+  margin: 24px 0;
+  border-radius: 5px;
+  padding: 0 5px 0 0;
+  background: rgba(33, 84, 159, 0.68);
+}
+
+button {
+  color: #C5C3C0;
+  background: transparent;
+  border: none;
+
 }
 
 .button-header {
-  color: #C5C3C0;
-  font-size: 30px;
-  font-family: Arial;
+  font-size: 20px;
+}
+
+.button-router {
+  height: 36px;
+}
+
+.button-header:hover {
+  color: #ffffff;
+}
+
+.button-router:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .site-layout-content {
-  background: #fff;
+<<<<<<< Updated upstream
+=======
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #202531;
+>>>>>>> Stashed changes
   min-height: 280px;
 }
 

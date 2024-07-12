@@ -1,17 +1,57 @@
+.layout {
 
+}
 
 .news-container {
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Центрування по горизонталі */
-  justify-content: center; /* Центрування по вертикалі */
-  gap: 16px;
-  padding: 16px;
+  margin: 50px 0;
 }
 
 .news-card {
-  width: 1500px;
-  padding: 10px;
-  height: 350px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+  height: 250px;
+  width: 70%;
+}
+
+.news-content {
+  width: 432px;
+  color: #c6d4df;
+  font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
+}
+
+.news-card-inner {
+  background: #383D46;
+  border: white;
+  transition: background-color 0.3s ease;
+  height: 100%;
+  width: 100%;
+}
+
+.news-card-inner:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Ви можете налаштувати колір і прозорість */
+}
+
+.news-card-image {
+  width: 40%;
+  height: 200px;
+}
+
+.news-description {
+  height: 80px;
+}
+
+.news-title {
+  width: 432px;
+  color: white;
+  font-size: 26px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.news-text {
+  margin: 0;
 }
