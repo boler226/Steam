@@ -1,5 +1,5 @@
-import { Layout, Col, Row, Image, Space, Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Layout, Col, Row, Image } from 'antd';
+import SiteRouter from "./components/SiteRouter.tsx";
 import NewsListPage from './components/news/NewsListPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -35,21 +35,7 @@ const App = () => {
             </Header>
 
             <Content className="site-layout-content" >
-                <div className="site-router">
-                    <Space style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Space>
-                            <button className="button-router">Нові й варті уваги</button>
-                            <button className="button-router">Новини</button>
-                            <button className="button-router">Категорії</button>
-                        </Space>
-                        <Input
-                            placeholder="пошук"
-                            prefix={<SearchOutlined />}
-                            style={{ width: 200, height: '30px', background: '#316282', border: 'none', color: '#C5C3C0' }}
-                        />
-                    </Space>
-                </div>
-
+                <SiteRouter/>
                     <Routes>
                         <Route path="/news" element={<NewsListPage />} />
                         {/*<Route path="/addNews" element={<NewsAddComponent />} />*/}
