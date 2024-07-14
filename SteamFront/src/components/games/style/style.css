@@ -1,0 +1,29 @@
+.card {
+    background: #202d39;
+    background: rgba( 0, 0, 0, 0.2 );
+    margin-bottom: 100px;
+    height: 70px;
+    width: 620px;
+}
+
+.game-card-image {
+    height: 70px;
+    width: 180px;
+}
+
+.card-title {
+    font-size: 1.25em;
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: #C7D5E0;
+}
+
+.card-categories {
+    color: #384959;
+
+    white-space: nowrap;
+}
+
+.card-price {
+    color: white;
+}

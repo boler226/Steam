@@ -1,6 +1,7 @@
 import { Layout, Col, Row, Image } from 'antd';
 import SiteRouter from "./components/SiteRouter.tsx";
 import NewsListPage from './components/news/NewsListPage';
+import GamesListPage from "./components/games/GamesListPage.tsx";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 
@@ -37,6 +38,7 @@ const App = () => {
             <Content className="site-layout-content" >
                 <SiteRouter/>
                     <Routes>
+                        <Route path="/" element={<GamesListPage />} />
                         <Route path="/news" element={<NewsListPage />} />
                         {/*<Route path="/addNews" element={<NewsAddComponent />} />*/}
                         {/*<Route path="/listNews" element={<NewsListComponent />} />*/}
