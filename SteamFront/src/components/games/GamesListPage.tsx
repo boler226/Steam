@@ -44,14 +44,22 @@ const GamesListPage = () => {
                                          onMouseEnter={() => handleMouseEnter(item)}>
                                         <div className="left-card">
                                             <Flex align='center' style={{height: '100%'}}>
-                                                <img className="game-card-image" alt={item.name}
-                                                     src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.images[0]}`}/>
+                                                {item.images[0] && (
+                                                    <img
+                                                        className="game-card-image"
+                                                        alt={item.name}
+                                                        src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.images[0].name}`}
+                                                    />
+                                                )}
                                                 <Flex justify='space-between' align='center'
                                                       style={{width: '400px', padding: '10px'}}>
                                                     <Flex vertical justify='space-around' style={{height: '70px'}}>
                                                         <div className="card-title">{item.name}</div>
-                                                        <div className="card-categories">Cars, Road,
-                                                            Simulator...</div>
+                                                        <Flex justify='space-around' gap={5} style={{ maxWidth: '260px', overflow: 'hidden'}}>
+                                                            {item.categories.map(item => (
+                                                                <div className="card-categories" key={item.id}>{item.name}</div>
+                                                            ))}
+                                                        </Flex>
                                                     </Flex>
                                                     <p className="card-price">{item.price}$</p>
                                                 </Flex>
@@ -77,9 +85,9 @@ const GamesListPage = () => {
                                     )}
                                 </Flex>
                                 <Flex vertical justify='space-around'>
-                                    {game?.images.slice(0, 4).map((item) => (
+                                    {game?.images.slice(1, 5).map((item) => (
                                         <img key={item.id} className="card-image-right" alt={item.name}
-                                             src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item}`}/>
+                                             src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.name}`}/>
                                     ))}
                                 </Flex>
                             </Flex>

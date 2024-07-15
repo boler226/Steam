@@ -39,7 +39,7 @@
 
 .card-categories {
     color: #384959;
-    white-space: nowrap;
+
 }
 
 .card-categories-right {
@@ -64,4 +64,5 @@
 .card-image-right {
     width: 100%;
     height: 150px;
+    margin-bottom: 10px;
 }
