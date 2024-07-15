@@ -1,9 +1,24 @@
-.card {
+.games-card-list {
+    width: 100%;
+}
+
+.left-card {
     background: #202d39;
     background: rgba( 0, 0, 0, 0.2 );
-    margin-bottom: 100px;
     height: 70px;
     width: 620px;
+}
+
+.left-card:hover {
+    background: #9CC2D8;
+
+}
+
+.right-card {
+    margin: 10px 0;
+    background: #9CC2D8;
+    width: 300px;
+    height: 800px;
 }
 
 .game-card-image {
@@ -14,16 +29,39 @@
 .card-title {
     font-size: 1.25em;
     font-family: Arial, Helvetica, sans-serif;
-
     color: #C7D5E0;
+}
+
+.card-title-right {
+    font-size: 1.5em;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .card-categories {
     color: #384959;
-
     white-space: nowrap;
+}
+
+.card-categories-right {
+    background: #4D6071;
+    padding: 0 5px;
+    color: white;
+    white-space: nowrap;
+}
+
+.card-rating {
+    padding: 5px;
+    width: 100%;
+    background: #4D6071;
+    color: #C7D5E0;
 }
 
 .card-price {
     color: white;
+    font-size: 1em;
+}
+
+.card-image-right {
+    width: 100%;
+    height: 150px;
 }
