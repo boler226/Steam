@@ -114,41 +114,17 @@ namespace Steam.Data
 
                 #endregion
 
-                #region Додавання зображень ігор
-
-                if (context.GameImages.Count() < 30)
-                {
-                    var gamesId = context.Games.Select(g => g.Id).ToList();
-
-                    var fakeGameImage = new Faker<GameImageEntity>("uk")
-                        .RuleFor(o => o.Name, f => $"game_image_{f.Random.Number(1, 100)}.jpg")
-                        .RuleFor(o => o.Priority, f => (byte)f.Random.Number(1, 3));
-
-                    foreach (var gameId in gamesId)
-                    {
-                        var images = fakeGameImage.Generate(3);
-                        foreach (var image in images)
-                        {
-                            image.GameId = gameId;
-                            context.GameImages.Add(image);
-                        }
-                    }
-                    context.SaveChanges();
-                }
-
-                #endregion
-
                 #region Додавання новин
 
-                if (context.News.Count() < 10)
+                if (context.News.Count() < 1)
                 {
                     var gamesId = context.Games.Select(g => g.Id).ToList();
 
                     var fakeNews = new Faker<NewsEntity>("uk")
-                        .RuleFor(o => o.Title, f => f.Lorem.Sentence())
+                        .RuleFor(o => o.Title, f => f.Commerce.ProductName())
                         .RuleFor(o => o.Description, f => f.Lorem.Paragraph())
                         .RuleFor(o => o.DateOfRelease, f => f.Date.PastOffset(1).UtcDateTime)
-                        .RuleFor(o => o.Image, f => $"news_image_{f.Random.Number(1, 100)}.jpg")
+                        .RuleFor(o => o.Image, f => $"https://picsum.photos/2000")
                         .RuleFor(o => o.VideoURL, f => $"https://videos.com/{f.Random.Guid()}.mp4");
 
                     var newsList = fakeNews.Generate(10);
@@ -164,24 +140,81 @@ namespace Steam.Data
 
                 #endregion
 
-                #region Додавання користувачів та їхніх ігор
+                #region Додавання ігор
 
-                if (context.UserGames.Count() < 3)
+                if (context.Games.Count() < 1)
                 {
-                    var users = context.Users.ToList();
-                    var games = context.Games.ToList();
+                    Func<string> getRandomImageUrl = () => $"https://picsum.photos/800/600?random={Guid.NewGuid()}";
 
-                    foreach (var someUser in users)
+                    var fakeGames = new Faker<GameEntity>("uk")
+                        .RuleFor(o => o.Name, f => f.Commerce.ProductName())
+                        .RuleFor(o => o.Price, f => decimal.Parse(f.Commerce.Price(10, 1000)))
+                        .RuleFor(o => o.Description, f => f.Lorem.Paragraph())
+                        .RuleFor(o => o.DateOfRelease, f => f.Date.Past(2))
+                        .RuleFor(o => o.SystemRequirements, f => f.Lorem.Paragraphs(2));
+
+                    var gamesList = fakeGames.Generate(10);
+
+                    foreach (var game in gamesList)
                     {
-                        var userGames = new Faker<UserGameEntity>("uk")
-                            .RuleFor(o => o.UserId, someUser.Id)
-                            .RuleFor(o => o.GameId, f => games[f.Random.Number(0, games.Count - 1)].Id)
-                            .Generate(2);
-
-                        context.UserGames.AddRange(userGames);
+                        for (int i = 0; i < 5; i++)
+                        {
+                            var gameImage = new GameImageEntity
+                            {
+                                Name = getRandomImageUrl()
+                            };
+                            game.GameImages.Add(gameImage);
+                        }
                     }
+
+                    foreach (var game in gamesList)
+                    {
+                        context.Games.Add(game);
+                    }
+
                     context.SaveChanges();
                 }
+
+                #endregion
+
+                #region Видалення всіх новин
+
+                //if (context.News.Any())
+                //{
+                //    context.News.RemoveRange(context.News);
+                //    context.SaveChanges();
+                //}
+
+                #endregion
+
+                #region Видалення всіх ігор
+
+                //if (context.Games.Any())
+                //{
+                //    context.Games.RemoveRange(context.Games);
+                //    context.SaveChanges();
+                //}
+
+                #endregion
+
+                #region Додавання користувачів та їхніх ігор
+
+                //if (context.UserGames.Count() < 3)
+                //{
+                //    var users = context.Users.ToList();
+                //    var games = context.Games.ToList();
+
+                //    foreach (var someUser in users)
+                //    {
+                //        var userGames = new Faker<UserGameEntity>("uk")
+                //            .RuleFor(o => o.UserId, someUser.Id)
+                //            .RuleFor(o => o.GameId, f => games[f.Random.Number(0, games.Count - 1)].Id)
+                //            .Generate(2);
+
+                //        context.UserGames.AddRange(userGames);
+                //    }
+                //    context.SaveChanges();
+                //}
 
                 #endregion
             }
