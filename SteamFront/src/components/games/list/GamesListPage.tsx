@@ -1,9 +1,9 @@
 import {Flex, Layout } from "antd";
 import './style/style.css';
 import {useEffect, useState} from "react";
-import { IGameItem } from "./types.ts";
-import { ImageSizes } from "../../config/config.ts";
-import http_common from "../../api/http_common.ts";
+import { IGameItem } from "./../types.ts";
+import { ImageSizes } from "../../../config/config.ts";
+import http_common from "../../../api/http_common.ts";
 
 const { Content } = Layout;
 
