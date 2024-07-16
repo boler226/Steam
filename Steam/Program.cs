@@ -54,10 +54,19 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Register the logging services
+builder.Services.AddLogging(config =>
+{
+    config.ClearProviders();
+    config.AddConsole();
+    config.AddDebug();
+});
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:5173")
+        builder => builder.WithOrigins("http://localhost:5177")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
@@ -113,6 +122,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.SeedData();
+await app.SeedData();
 
 app.Run();
