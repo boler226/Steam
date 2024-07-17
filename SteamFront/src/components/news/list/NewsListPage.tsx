@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Layout, Card, Flex } from 'antd';
-import http_common from "../../api/http_common.ts";
-import { ImageSizes } from "../../config/config.ts";
+import http_common from "../../../api/http_common.ts";
+import { ImageSizes } from "../../../config/config.ts";
 import { INewsItem } from "./types.ts";
 import './style/NewsListPage.css';
 

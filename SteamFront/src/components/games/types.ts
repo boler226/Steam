@@ -1,4 +1,4 @@
-import {INewsItem} from "../news/types.ts";
+import {INewsItem} from "../news/list/types.ts";
 
 export interface IGameItem {
     id: number;

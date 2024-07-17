@@ -4,6 +4,7 @@
 
 .news-container {
   margin: 50px 0;
+  min-height: 700px;
 }
 
 .news-card {
