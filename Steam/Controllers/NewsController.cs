@@ -19,7 +19,8 @@ namespace Steam.Controllers
         IMapper mapper,
         IImageService imageService,
         INewsControllerService service,
-        IConfiguration configuration
+        IConfiguration configuration,
+        IPaginationService<NewsItemViewModel, NewsFilterViewModel> pagination
         ) : ControllerBase
     {
         // Переглянути список новин
@@ -35,6 +36,19 @@ namespace Steam.Controllers
                 return Ok(list);
             }
             catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPage([FromQuery] NewsFilterViewModel model)
+        {
+            try
+            {
+                return Ok(await pagination.GetPageAsync(model));
+            }
+            catch (Exception ex) 
             {
                 return StatusCode(500, ex.Message);
             }

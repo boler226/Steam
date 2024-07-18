@@ -13,6 +13,8 @@ using Steam.Services;
 using FluentValidation;
 using Steam.Services.ControllerServices.Interfaces;
 using Steam.Services.ControllerServices;
+using Steam.Models.News;
+using Steam.Services.PaginationServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +95,8 @@ builder.Services.AddTransient<INewsControllerService, NewsControllerService>();
 builder.Services.AddTransient<IGamesControllerService, GamesControllerService>();
 
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
+
+builder.Services.AddTransient<IPaginationService<NewsItemViewModel, NewsFilterViewModel>, NewsPaginationService>();
 
 var app = builder.Build();
 

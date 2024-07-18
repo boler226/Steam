@@ -23,7 +23,7 @@ namespace Steam.Services.ControllerServices
             {
                 news.Title = model.Title;
                 news.Description = model.Description;
-                news.VideoURL = model.VideoURL;
+                news.VideoURL = model.VideoURL ?? " ";
                 news.Image = await imageService.SaveImageAsync(model.Image);
                 news.DateOfRelease = DateTime.UtcNow;
                 news.GameId = model.GameId;
