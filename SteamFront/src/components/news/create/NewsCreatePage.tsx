@@ -1,6 +1,6 @@
 import {INewsCreate} from "./types.ts";
 import {Form, Spin, Button, Input, message, Card, Select, Upload, Flex} from "antd";
-import {Status} from "./../../../enums/";
+import {Status} from "./../../../enums/index.ts";
 import { imageConverterToFileArray } from "../../../config/converter.ts";
 import TextArea from "antd/es/input/TextArea";
 import {ICategoryName} from "../../../interfaces/categories";
@@ -19,13 +19,15 @@ const NewsCreatePage = () => {
     const [imageUrl, setImageUrl] = useState<string | undefined>();
     const [game, setGame] = useState<ICategoryName[]>();
     const [formValues, setFormValues] = useState<Partial<INewsCreate>>({});
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
 
     const navigate = useNavigate();
 
     const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
-        http_common.get<ICategoryName[]>("/api/game")
+        http_common.get<ICategoryName[]>("/api/Games/List")
             .then(resp => {
                 setGame(resp.data);
             });
@@ -34,7 +36,16 @@ const NewsCreatePage = () => {
     const onFinish = async (values: INewsCreate) => {
         try {
             console.log("Submit form", values);
-            await http_common.post("/api/news", values,{
+
+            const formData = new FormData();
+            formData.append("title", values.title);
+            formData.append("description", values.description);
+            formData.append("gameId", values.gameId.toString());
+            if (imageFile)
+            {
+                formData.append("image", imageFile);
+            }
+            await http_common.post("/api/News/Create", formData,{
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -52,6 +63,7 @@ const NewsCreatePage = () => {
             const file = info.fileList[0].originFileObj as File; // Отримати оригінальний File об'єкт
             const url = URL.createObjectURL(file); // Створити URL для зображення
             setImageUrl(url); // Зберегти URL для відображення у <img>
+            setImageFile(file); // Зберегти файл зображення
         } else {
             setImageUrl(undefined); // Скинути URL, якщо файл видалено
         }
@@ -114,14 +126,18 @@ const NewsCreatePage = () => {
                     >
                         <Select
                             placeholder="Оберіть гру: "
-                            options={game}
+                            options={game?.map(g => ({
+                                value: g.id,
+                                label: g.name
+                            }))}
                         />
                     </Form.Item>
 
                     <Form.Item
                         label="Фото"
                         name="image"
-                        valuePropName="fileList"
+                        htmlFor="image"
+                        valuePropName="file"
                         getValueFromEvent={imageConverterToFileArray}
                         rules={[
                             {required: true, message: 'Це поле є обов\'язковим!'},
@@ -139,6 +155,12 @@ const NewsCreatePage = () => {
                         >
                             <Button type="primary" shape="round" icon={<DownloadOutlined/>}/>
                         </Upload>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" style={{ width: '140px', height: '40px', marginTop: '20px'}}>
+                            Створити
+                        </Button>
                     </Form.Item>
                 </Form>
 

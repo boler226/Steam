@@ -42,7 +42,6 @@ const App = () => {
                         <Route path="/" element={<GamesListPage />} />
                         <Route path="/news" element={<NewsListPage />} />
                         <Route path="/createNews" element={<NewsCreatePage />} />
-                        {/*<Route path="/listNews" element={<NewsListComponent />} />*/}
                     </Routes>
             </Content>
             <Footer className="footer">©2023 Created by boler</Footer>

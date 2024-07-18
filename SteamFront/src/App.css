@@ -3,13 +3,16 @@ body {
   padding: 0;
 }
 
+button:hover,
+.ant-btn:hover,
+.ant-btn:focus {
+  cursor: pointer;
+}
+
 .layout {
-<<<<<<< Updated upstream
   min-height: 100vh;
-=======
   min-height: 1080px;
   background: #353c4e;
->>>>>>> Stashed changes
 }
 
 .header {

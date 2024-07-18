@@ -1,3 +1,9 @@
 .custom-label .ant-form-item-label > label {
     color: #AFAFAF; /* Замість 'blue' використайте потрібний вам колір */
 }
+
+
+
+.createButton:hover{
+    background-color: #3587ff;
+}
