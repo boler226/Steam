@@ -1,7 +1,7 @@
 import { Layout, Col, Row, Image } from 'antd';
 import SiteRouter from "./components/SiteRouter.tsx";
 import NewsListPage from './components/news/list/NewsListPage.tsx';
-import GamesListPage from "./components/games/GamesListPage.tsx";
+import GamesListPage from "./components/games/list/GamesListPage.tsx";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import NewsCreatePage from "./components/news/create/NewsCreatePage.tsx";
