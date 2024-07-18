@@ -77,7 +77,7 @@ const NewsCreatePage = () => {
 
     return(
         <Spin spinning={status === Status.LOADING}>
-            <Flex justify="space-around" align="center">
+            <Flex justify="space-around" align="start">
                 {contextHolder}
                 <Form
                     form={form}
@@ -115,7 +115,7 @@ const NewsCreatePage = () => {
                         ]}
                         className="custom-label"
                     >
-                        <TextArea/>
+                        <TextArea style={{ minHeight: '400px'}} />
                     </Form.Item>
 
                     <Form.Item

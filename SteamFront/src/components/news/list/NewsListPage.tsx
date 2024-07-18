@@ -38,12 +38,12 @@ const NewsListPage = () => {
                             <Card hoverable className="news-card-inner">
                                 <Flex justify='space-between'>
                                     <div className="news-content">
-                                        <Flex vertical justify='space-between' align='flex-start' gap='small' style={{height: '200px'}}>
+                                        <Flex vertical justify='space-between' align='flex-start' gap='small' style={{ height: '200px'}} >
                                                 <p className="news-title">{item.title}</p>
                                                 <p className="news-text">{item.description}</p>
-                                                <Flex justify='space-between' gap='50%'>
-                                                    <p className="news-text">{new Date(item.dateOfRelease).toLocaleDateString()}</p>
-                                                    <p className="news-text"
+                                                <Flex justify='space-between' gap='50%' >
+                                                    <p className="news-info">{new Date(item.dateOfRelease).toLocaleDateString()}</p>
+                                                    <p className="news-info"
                                                        style={{whiteSpace: 'nowrap'}}
                                                     >
                                                         {item.game.name}

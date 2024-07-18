@@ -18,6 +18,7 @@
 
 .news-content {
   width: 432px;
+  overflow: hidden;
   color: #c6d4df;
   font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
 }
@@ -55,4 +56,14 @@
 
 .news-text {
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* кількість рядків до обрізання */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
+.news-info {
+  margin: 0;
+  max-width: 200px;
+}
+
