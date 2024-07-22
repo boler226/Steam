@@ -6,6 +6,7 @@ export interface INewsItem {
     image: string;
     videoURL: string;
     game: IGameItem;
+    totalCount: number;
 }
 
 export interface IGameItem {
@@ -13,9 +14,9 @@ export interface IGameItem {
     name: string;
 }
 
-export interface INewsSearch {
-    title?: string;
-    description?: string;
-    page: number;
+export interface INewsData {
+    items: INewsItem[]; // Change list to items
+    pageIndex: number;
     pageSize: number;
+    totalCount: number;
 }

@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
-import { Layout, Card, Flex } from 'antd';
+import { Layout, Card, Flex, Pagination } from 'antd';
 import http_common from "../../../api/http_common.ts";
 import { ImageSizes } from "../../../config/config.ts";
-import { INewsItem } from "./types.ts";
+import { INewsItem, INewsData } from "./types.ts";
 import './style/NewsListPage.css';
 
 const { Content } = Layout;
 
 const NewsListPage = () => {
     const [data, setData] = useState<INewsItem[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalItems, setTotalItems] = useState<number>(0);
 
     useEffect(() => {
-        fetchNews();
-    }, []);
+        fetchNews(currentPage, pageSize);
+    }, [currentPage, pageSize]);
 
-    const fetchNews = () => {
-        http_common.get<INewsItem[]>("/api/news/List")
+    const fetchNews = (page: number, pageSize: number) => {
+        http_common.get<INewsData>(`/api/news/List?page=${page}&pageSize=${pageSize}`)
             .then(resp => {
-                setData(resp.data);
+                setData(resp.data.items);
+                setTotalItems(resp.data.totalCount);
             });
-
     };
 
     const handleNewsClick = (newsItem: INewsItem) => {
         console.log("Button click", newsItem);
+    };
+
+    const handlePageChange = (page: number, pageSize?: number) => {
+      setCurrentPage(page);
+      if (pageSize)
+          setPageSize(pageSize);
     };
 
     return (
@@ -58,6 +67,14 @@ const NewsListPage = () => {
                         </div>
                     ))}
                 </Flex>
+                <Pagination
+                    current={currentPage}
+                    pageSize={pageSize}
+                    total={totalItems}
+                    onChange={handlePageChange}
+                    showSizeChanger
+                    pageSizeOptions={['5', '10', '20', '50']}
+                />
             </Content>
         </Layout>
     );
