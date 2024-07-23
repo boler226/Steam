@@ -87,15 +87,17 @@ builder.Services.AddScoped(provider => new MapperConfiguration(cfg =>
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddAutoMapper(typeof(AppMapProfile));
-
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 
+builder.Services.AddTransient<IAccountsControllerService, AccountsControllerService>();
+
 builder.Services.AddTransient<INewsControllerService, NewsControllerService>();
+
 builder.Services.AddTransient<IGamesControllerService, GamesControllerService>();
 
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
-
 builder.Services.AddTransient<IPaginationService<NewsItemViewModel, NewsFilterViewModel>, NewsPaginationService>();
 
 var app = builder.Build();
