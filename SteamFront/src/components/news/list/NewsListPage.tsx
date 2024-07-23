@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { Layout, Card, Flex, Pagination } from 'antd';
+import { Layout, Card, Flex } from 'antd';
 import http_common from "../../../api/http_common.ts";
 import { ImageSizes } from "../../../config/config.ts";
-import { INewsItem, INewsData } from "./types.ts";
-import './style/NewsListPage.css';
+import { INewsItem } from "../../../interfaces/news";
+import { IPage } from "../../../interfaces/pagination";
+import './style/style.css';
+import Pagination from "../../Pagination.tsx";
 
 const { Content } = Layout;
 
 const NewsListPage = () => {
     const [data, setData] = useState<INewsItem[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
+    const [pageSize, setPageSize] = useState<number>(5);
     const [totalItems, setTotalItems] = useState<number>(0);
 
     useEffect(() => {
@@ -18,10 +20,11 @@ const NewsListPage = () => {
     }, [currentPage, pageSize]);
 
     const fetchNews = (page: number, pageSize: number) => {
-        http_common.get<INewsData>(`/api/news/List?page=${page}&pageSize=${pageSize}`)
+        http_common.get<IPage<INewsItem>>(`/api/News/GetPage?PageIndex=${page - 1}&PageSize=${pageSize}`)
             .then(resp => {
-                setData(resp.data.items);
-                setTotalItems(resp.data.totalCount);
+                setData(resp.data.data);
+                console.log(resp.data.data);
+                setTotalItems(resp.data.itemsAvailable);
             });
     };
 
@@ -66,15 +69,13 @@ const NewsListPage = () => {
                             </Card>
                         </div>
                     ))}
+                    <Pagination
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={totalItems}
+                        onChange={handlePageChange}
+                    />
                 </Flex>
-                <Pagination
-                    current={currentPage}
-                    pageSize={pageSize}
-                    total={totalItems}
-                    onChange={handlePageChange}
-                    showSizeChanger
-                    pageSizeOptions={['5', '10', '20', '50']}
-                />
             </Content>
         </Layout>
     );
