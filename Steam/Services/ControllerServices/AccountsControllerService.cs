@@ -52,7 +52,7 @@ namespace Steam.Services.ControllerServices
 
                 await transaction.CommitAsync();
             }
-            catch
+            catch 
             {
                 await transaction.RollbackAsync();
                 throw;

@@ -17,7 +17,8 @@ namespace Steam.Mapper
         {
             _context = context;
 
-            CreateMap<RegisterViewModel, UserEntity>();
+            CreateMap<RegisterViewModel, UserEntity>()
+                .ForMember(dest => dest.NickName, opt => opt.MapFrom(src => src.NickName));
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel, CategoryEntity>();
