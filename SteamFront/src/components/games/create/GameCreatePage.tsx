@@ -14,7 +14,7 @@ import "./style/style.css";
 
 const GameCreatePage = () => {
     const [form] = Form.useForm<IGameCreate>();
-    const [status] = useState<Status>(Status.IDLE);
+    const [status, setStatus] = useState<Status>(Status.IDLE);
     //const [imageUrl, setImageUrl] = useState<string | undefined>();
     const [category, setCategory] = useState<ICategoryName[]>();
     const [formValues, setFormValues] = useState<Partial<IGameCreate>>({});
@@ -24,20 +24,16 @@ const GameCreatePage = () => {
     const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const resp = await http_common.get<ICategoryName[]>("/api/Category");
+        http_common.get<ICategoryName[]>("/api/Category")
+            .then(resp => {
                 setCategory(resp.data);
-            } catch (error) {
-                console.error("Failed to fetch categories:", error);
-            }
-        };
-        fetchCategories();
+            });
     }, []);
 
     const onFinish = async (values: IGameCreate) => {
       try
       {
+          setStatus(Status.LOADING);
           console.log("Submit form", values);
 
           const formData = new FormData();
@@ -45,7 +41,9 @@ const GameCreatePage = () => {
           formData.append("price", values.price.toString());
           formData.append("description", values.description);
           formData.append("systemRequirements", values.systemRequirements);
-          formData.append("categories", values.categories.toString());
+          values.categories.forEach((categoryId, index) => {
+              formData.append(`categories[${index}]`, categoryId.toString());
+          });
 
           if (imageFile)
           {
@@ -59,10 +57,12 @@ const GameCreatePage = () => {
           });
           navigate(`/`);
       }
-      catch (error)
-      {
+      catch (error) {
           console.log("error", error);
           console.log(messageApi.error);
+      }
+      finally {
+          setStatus(Status.IDLE);
       }
     }
 
