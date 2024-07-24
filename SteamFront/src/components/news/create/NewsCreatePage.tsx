@@ -1,6 +1,6 @@
-import {INewsCreate} from "./types.ts";
+import {INewsCreate} from "../../../interfaces/news";
 import {Form, Spin, Button, Input, message, Card, Select, Upload, Flex} from "antd";
-import {Status} from "./../../../enums/index.ts";
+import {Status} from "../../../enums";
 import { imageConverterToFileArray } from "../../../config/converter.ts";
 import TextArea from "antd/es/input/TextArea";
 import {ICategoryName} from "../../../interfaces/categories";
@@ -34,7 +34,8 @@ const NewsCreatePage = () => {
     }, []);
 
     const onFinish = async (values: INewsCreate) => {
-        try {
+        try
+        {
             console.log("Submit form", values);
 
             const formData = new FormData();
@@ -72,7 +73,6 @@ const NewsCreatePage = () => {
     const handleFormChange = (allValues: any) => {
         setFormValues({...formValues, ...allValues});
     };
-
 
 
     return(
