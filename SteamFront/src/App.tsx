@@ -5,6 +5,7 @@ import GamesListPage from "./components/games/list/GamesListPage.tsx";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import NewsCreatePage from "./components/news/create/NewsCreatePage.tsx";
+import GameCreatePage from "./components/games/create/GameCreatePage.tsx";
 
 const { Content, Footer , Header} = Layout;
 
@@ -42,6 +43,7 @@ const App = () => {
                         <Route path="/" element={<GamesListPage />} />
                         <Route path="/news" element={<NewsListPage />} />
                         <Route path="/createNews" element={<NewsCreatePage />} />
+                        <Route path="/createGames" element={<GameCreatePage />} />
                     </Routes>
             </Content>
             <Footer className="footer">©2023 Created by boler</Footer>
