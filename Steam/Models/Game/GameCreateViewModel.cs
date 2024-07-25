@@ -8,7 +8,7 @@ namespace Steam.Models.Game
         public decimal Price { get; set; }
         public string Description { get; set; }
         public string SystemRequirements { get; set; }
-        public List<int> CategoryIds { get; set; }
+        public List<int> Categories { get; set; }
         public IEnumerable<IFormFile> Images { get; set; }
     }
 }

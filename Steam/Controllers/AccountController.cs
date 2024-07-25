@@ -1,93 +1,63 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Steam.Constants;
 using Steam.Data;
+using Steam.Services.ControllerServices;
 using Steam.Data.Entities.Identity;
 using Steam.Helpers;
 using Steam.Interfaces;
 using Steam.Models.Account;
+using Steam.Services.ControllerServices.Interfaces;
+using Steam.Common.Exceptions;
 
 namespace Steam.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController(
+        UserManager<UserEntity> userManager,
+        IJwtTokenService jwtTokenService,
+        IValidator<RegisterViewModel> validator,
+        IAccountsControllerService service
+        ) : ControllerBase
     {
-        private readonly UserManager<UserEntity> _userManager;
-        private IJwtTokenService _jwtTokenService;
-        private readonly AppEFContext _context; 
 
-        public AccountController(UserManager<UserEntity> userManager,
-            IJwtTokenService jwtTokenService,
-            AppEFContext context)
+        [HttpPost]
+        public async Task<IActionResult> SignIn([FromForm] SignInViewModel model)
         {
-            _context = context;
-            _userManager = userManager;
-            _jwtTokenService = jwtTokenService;
+           UserEntity user = await userManager.FindByEmailAsync(model.Email);
+
+            if (user is null || !await userManager.CheckPasswordAsync(user, model.Password))
+                return Unauthorized("Wrong authentication data");
+
+            return Ok(new JwtTokenResponse
+            {
+                Token = await jwtTokenService.CreateTokenAsync(user)
+            });
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> Registraion([FromForm] RegisterViewModel model)
         {
+            var validatorResult = await validator.ValidateAsync(model);
+
+            if (!validatorResult.IsValid)
+                return BadRequest(validatorResult.Errors);
+
             try
             {
-                var users = _context.Users.ToList();
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                var user = await service.SignUpAsync(model);
 
-                if (user == null)
+                return Ok(new JwtTokenResponse
                 {
-                    return BadRequest("Користувача з таким email не існує");
-                }
-
-                if (!await _userManager.CheckPasswordAsync(user, model.Password))
-                {
-                    return BadRequest("Неправильний пароль");
-                }
-
-                var token = await _jwtTokenService.CreateTokenAsync(user);
-                return Ok(new { token });
+                    Token = await jwtTokenService.CreateTokenAsync(user)
+                });
             }
-            catch (Exception ex)
+            catch (IdentityException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.IdentityResult.Errors);
             }
         }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
-        {
-            try
-            {
-                string imageName = string.Empty;
-                if (!string.IsNullOrEmpty(model.ImageBase64))
-                {
-                    imageName = await ImageWorker.SaveImageAsync(model.ImageBase64);
-                }
-                var user = new UserEntity
-                {
-                    NickName = model.NickName,
-                    Password = model.Password,
-                    Email = model.Email,
-                    UserName = model.Email,
-                    Photo = imageName,
-                };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    result = await _userManager.AddToRoleAsync(user, Roles.User);
-                }
-                else
-                    return BadRequest("Щось пішло не так!");
-
-                var token = await _jwtTokenService.CreateTokenAsync(user);
-                return Ok(new { token });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
     }
 }

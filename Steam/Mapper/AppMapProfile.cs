@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Steam.Data;
 using Steam.Data.Entities;
+using Steam.Data.Entities.Identity;
+using Steam.Models.Account;
 using Steam.Models.Category;
 using Steam.Models.Game;
 using Steam.Models.Helpers;
@@ -14,6 +16,9 @@ namespace Steam.Mapper
         public AppMapProfile(AppEFContext context) 
         {
             _context = context;
+
+            CreateMap<RegisterViewModel, UserEntity>()
+                .ForMember(dest => dest.NickName, opt => opt.MapFrom(src => src.NickName));
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel, CategoryEntity>();

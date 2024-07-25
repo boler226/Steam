@@ -5,6 +5,6 @@
         public string NickName { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public string ImageBase64 { get; set; }
+        public IFormFile Image { get; set; }
     }
 }
