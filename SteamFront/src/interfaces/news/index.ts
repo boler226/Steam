@@ -20,3 +20,7 @@ export interface INewsCreate {
     image: File
     gameId: number
 }
+
+export interface INewsFilter {
+    ByRelease?: boolean
+}
