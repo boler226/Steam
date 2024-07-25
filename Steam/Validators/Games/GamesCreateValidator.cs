@@ -32,7 +32,7 @@ namespace Steam.Validators.Games
                 .MaximumLength(1000)
                     .WithMessage("System requirements cannot be longer than 1000 characters.");
 
-            RuleFor(g => g.CategoryIds)
+            RuleFor(g => g.Categories)
                 .MustAsync(async (ids, cancellationToken) =>
                 {
                     foreach (var id in ids)

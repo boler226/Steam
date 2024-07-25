@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Steam.Data;
 using Steam.Data.Entities;
+using Steam.Interfaces;
 using Steam.Models.Category;
 using Steam.Models.Game;
 using Steam.Models.News;
@@ -19,7 +20,8 @@ namespace Steam.Controllers
         IValidator<GameCreateViewModel> createValidator,
         IValidator<GameEditViewModel> editValidator,
         IMapper mapper,
-        IGamesControllerService service
+        IGamesControllerService service,
+        IPaginationService<GameItemViewModel, GameFilterViewModel> pagination 
         ) : ControllerBase
     {
         // Переглянути список ігор
@@ -33,6 +35,19 @@ namespace Steam.Controllers
               .ToListAsync();
 
                 return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPage([FromQuery] GameFilterViewModel model)
+        {
+            try
+            {
+                return Ok(await pagination.GetPageAsync(model));
             }
             catch (Exception ex)
             {

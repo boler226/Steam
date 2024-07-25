@@ -15,6 +15,7 @@ using Steam.Services.ControllerServices.Interfaces;
 using Steam.Services.ControllerServices;
 using Steam.Models.News;
 using Steam.Services.PaginationServices;
+using Steam.Models.Game;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +100,8 @@ builder.Services.AddTransient<IGamesControllerService, GamesControllerService>()
 
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 builder.Services.AddTransient<IPaginationService<NewsItemViewModel, NewsFilterViewModel>, NewsPaginationService>();
+builder.Services.AddTransient<IPaginationService<GameItemViewModel, GameFilterViewModel>, GamesPaginationService>();
+
 
 var app = builder.Build();
 

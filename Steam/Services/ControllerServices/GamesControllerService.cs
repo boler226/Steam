@@ -37,9 +37,9 @@ namespace Steam.Services.ControllerServices
                     }
                 }
 
-                if (model.CategoryIds != null && model.CategoryIds.Any())
+                if (model.Categories != null && model.Categories.Any())
                 {
-                    foreach (var categoryId in model.CategoryIds)
+                    foreach (var categoryId in model.Categories)
                     {
                         game.GameCategories.Add(new GameCategoryEntity
                         {
