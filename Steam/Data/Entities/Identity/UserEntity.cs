@@ -8,8 +8,6 @@ namespace Steam.Data.Entities.Identity
     public class UserEntity : IdentityUser<int>
     {
         [Required, StringLength(100)]
-        public string NickName { get; set; }
-        [Required, StringLength(100)]
         public string Password { get; set; }
        
         [StringLength(2500)]

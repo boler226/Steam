@@ -56,9 +56,8 @@ namespace Steam.Data
                 {
                     var user = new UserEntity
                     {
-                        NickName = "SteamAdmin",
                         Email = "admin@gmail.com",
-                        UserName = "admin@gmail.com",
+                        UserName = "SteamAdmin",
                         Password = "123456"
                     };
                     var result = userManager.CreateAsync(user, "123456").Result;

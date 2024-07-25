@@ -24,7 +24,7 @@ namespace Steam.Validators.Account
                 .MustAsync(IsNewEmail)
                     .WithMessage("There is already a user with this email");
 
-            RuleFor(r => r.NickName)
+            RuleFor(r => r.UserName)
                 .NotEmpty()
                     .WithMessage("Username is empty or null")
                 .MaximumLength(100)

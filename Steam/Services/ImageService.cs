@@ -1,4 +1,6 @@
-﻿using SixLabors.ImageSharp.Formats.Webp;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.Processing;
 using Steam.Interfaces;
 
 

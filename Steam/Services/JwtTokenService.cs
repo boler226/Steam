@@ -19,7 +19,7 @@ namespace Steam.Services
             var claims = new List<Claim>
             {
                 new Claim("email", user.Email),
-                new Claim("name", user.NickName)
+                new Claim("name", user.UserName)
             };
             var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSecretKey"));
 
