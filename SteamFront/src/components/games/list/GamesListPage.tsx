@@ -4,6 +4,8 @@ import {useEffect, useState} from "react";
 import {IGameItem} from "../../../interfaces/games";
 import {ImageSizes} from "../../../config/config.ts";
 import http_common from "../../../api/http_common.ts";
+import { IPage } from "../../../interfaces/pagination";
+import Pagination from "../../Pagination.tsx";
 
 const { Content } = Layout;
 
@@ -12,7 +14,7 @@ const GamesListPage = () => {
     const [data, setData] = useState<IGameItem[]>([]);
     const [game, setGame] = useState<IGameItem>();
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(5);
+    const [pageSize, setPageSize] = useState<number>(10);
     const [totalItems, setTotalItems] = useState<number>(0);
 
     useEffect(() => {
@@ -20,14 +22,22 @@ const GamesListPage = () => {
     }, [currentPage, pageSize]);
 
     const fetchGames = (page: number, pageSize: number) => {
-        http_common.get<IGameItem[]>("/api/Games/List")
+        http_common.get<IPage<IGameItem>>(`/api/Games/GetPage?PageIndex=${page - 1}&PageSize=${pageSize}`)
             .then(resp => {
-                setData(resp.data);
+                setData(resp.data.data);
+                console.log(resp.data.data);
+                setTotalItems(resp.data.itemsAvailable);
             });
     }
 
     const handleGameClick = (gameItem: IGameItem) => {
         console.log("game click", gameItem);
+    };
+
+    const handlePageChange = (page: number, pageSize?: number) => {
+        setCurrentPage(page);
+        if (pageSize)
+            setPageSize(pageSize);
     };
 
     const handleMouseEnter = (gameItem: IGameItem) => {
@@ -39,8 +49,8 @@ const GamesListPage = () => {
                 <Content className="games-container">
                     <div className="games-card-list">
                         <Flex  justify='center' gap={25}>
-                            <Flex vertical justify='space-around' align='center' gap={10} style={{padding: '10px 0'}}>
-                                {data && data.length > 0 && data.slice(0, 10).map((item) => (
+                            <Flex vertical justify='start' align='center' gap={10} style={{padding: '10px 0'}}>
+                                {data && data.length > 0 && data.map((item) => (
                                     <div key={item.id}>
                                         <div className="card"
                                              onClick={() => handleGameClick(item)}
@@ -71,6 +81,12 @@ const GamesListPage = () => {
                                         </div>
                                     </div>
                                 ))}
+                                <Pagination
+                                    current={currentPage}
+                                    pageSize={pageSize}
+                                    total={totalItems}
+                                    onChange={handlePageChange}
+                                />
                             </Flex>
 
                             <div className="right-card">
