@@ -11,12 +11,15 @@ const GamesListPage = () => {
 
     const [data, setData] = useState<IGameItem[]>([]);
     const [game, setGame] = useState<IGameItem>();
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(5);
+    const [totalItems, setTotalItems] = useState<number>(0);
 
     useEffect(() => {
-        fetchGames()
-    }, []);
+        fetchGames(currentPage, pageSize);
+    }, [currentPage, pageSize]);
 
-    const fetchGames = () => {
+    const fetchGames = (page: number, pageSize: number) => {
         http_common.get<IGameItem[]>("/api/Games/List")
             .then(resp => {
                 setData(resp.data);
