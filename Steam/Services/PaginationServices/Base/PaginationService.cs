@@ -52,7 +52,7 @@ namespace Steam.Services.PaginationServices.Base
         }
 
         protected abstract IQueryable<EntityType> GetQuery();
-        protected abstract IQueryable<EntityType> FilterQuery(IQueryable<EntityType> query, PaginationViewModelType paginationViewModel);
+        protected abstract IQueryable<EntityType> FilterQuery(IQueryable<EntityType> query, PaginationViewModelType model);
         protected virtual async Task<IEnumerable<EntityViewModelType>> MapAsync(IQueryable<EntityType> query)
         {
             return await query

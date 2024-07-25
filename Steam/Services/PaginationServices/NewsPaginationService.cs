@@ -13,9 +13,12 @@ namespace Steam.Services.PaginationServices
     {
         protected override IQueryable<NewsEntity> GetQuery() => context.News.OrderBy(n => n.Id);
 
-        protected override IQueryable<NewsEntity> FilterQuery(IQueryable<NewsEntity> query, NewsFilterViewModel paginationVm)
+        protected override IQueryable<NewsEntity> FilterQuery(IQueryable<NewsEntity> query, NewsFilterViewModel model)
         {
-           return query.OrderByDescending(n => n.DateOfRelease);
+            if (model.ByRelease is not null)
+                query.OrderByDescending(n => n.DateOfRelease);
+
+            return query; 
         }
         
     }

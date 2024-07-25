@@ -5,6 +5,6 @@ namespace Steam.Models.News
 {
     public class NewsFilterViewModel : PaginationViewModel
     {
-        public DateTime dateOfRelease;
+        public bool? ByRelease { get; set; }
     }
 }
