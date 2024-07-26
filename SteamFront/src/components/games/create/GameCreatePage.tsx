@@ -31,8 +31,7 @@ const GameCreatePage = () => {
     }, []);
 
     const onFinish = async (values: IGameCreate) => {
-      try
-      {
+      try {
           setStatus(Status.LOADING);
           console.log("Submit form", values);
 
