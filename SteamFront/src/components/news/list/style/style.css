@@ -16,6 +16,18 @@
   width: 70%;
 }
 
+.news-filter {
+  width: 180px;
+  height: 45px;
+  font-size: 16px;
+
+  background: #282B31;
+}
+
+.custom-input input {
+  color: #C5C3C0;
+}
+
 .news-content {
   width: 432px;
   overflow: hidden;

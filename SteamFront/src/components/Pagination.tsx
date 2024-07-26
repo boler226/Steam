@@ -25,8 +25,8 @@ const Pagination: React.FC<PaginationProps> = ({ current, pageSize, total, onCha
                         padding: '5px 10px',
                         margin: '0 2px',
                         border: '1px solid #ccc',
-                        backgroundColor: current === i ? '#282B31' : 'rgba(255,255,255,0.5)',
-                        color: current === i ? 'rgba(255,255,255,0.5)' : '#000',
+                        backgroundColor: current === i ? 'rgba(255,255,255,0.5)' : '#282B31',
+                        color: current === i ? '#000' : 'rgba(255,255,255,0.5)',
                         borderRadius: '3px',
                         cursor: 'pointer',
                     }}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Layout, Card, Flex, Form, Checkbox, Button } from 'antd';
+import {Layout, Card, Flex, Form, Checkbox, Button, Input} from 'antd';
 import http_common from "../../../api/http_common.ts";
 import { ImageSizes } from "../../../config/config.ts";
 import { INewsItem } from "../../../interfaces/news";
@@ -7,6 +7,7 @@ import { INewsFilter } from "../../../interfaces/news";
 import { IPage } from "../../../interfaces/pagination";
 import './style/style.css';
 import Pagination from "../../Pagination.tsx";
+import {SearchOutlined} from "@ant-design/icons";
 
 const { Content } = Layout;
 
@@ -41,32 +42,37 @@ const NewsListPage = () => {
           setPageSize(pageSize);
     };
 
-    const handleFilterChange = () => {
-        setFilters(form.getFieldsValue());
-        setFilters(values);
+    const handleFilterChange = (filterType: string) => {
+        if (filterType === "latest") {
+            setFilters({ ByRelease: true });
+        } else if (filterType === "popular") {
+            // Add your logic for popular news
+        }
     };
 
     return (
         <Layout style={{ backgroundColor: '#282B31' }}>
+            <Flex justify='center' align='center' gap={60} style={{height: '70px', background: '#383D46'}}>
+                <button className="news-filter" onClick={() => handleFilterChange("latest")}>
+                    Останні новини
+                </button>
+                <button className="news-filter" onClick={() => handleFilterChange("popular")}>
+                    Популярні новини
+                </button>
+                <button className="news-filter" onClick={() => handleFilterChange("user")}>
+                    Ваші новини
+                </button>
+                <button className="news-filter" onClick={() => handleFilterChange("official")}>
+                    Офіціальні новини
+                </button>
+                <Input
+                    prefix={<SearchOutlined/>}
+                    style={{width: 180, height: '45px', background: '#282B31', border: 'none', color: '#C5C3C0'}}
+                />
+            </Flex>
             <Content className="news-container">
                 <Flex vertical justify='space-around' align='center' gap={50}>
-                    <Form
-                        form={form}
-                        layout="inline"
-                        onValuesChange={handleFilterChange}
-                    >
-                        <Form.Item name="ByRelease" valuePropName="checked">
-                            <Checkbox>Filter by Release</Checkbox>
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button type="primary" htmlType="button" onClick={() => fetchNews(currentPage, pageSize, filters)}>
-                                Apply Filters
-                            </Button>
-                        </Form.Item>
-                    </Form>
-
-                    {data.map((item) => (
+                {data.map((item) => (
                         <div className="news-card" key={item.id}
                              onClick={() => handleNewsClick(item)}
                              role="button"
