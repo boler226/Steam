@@ -1,4 +1,5 @@
-﻿using Steam.Interfaces;
+﻿using SixLabors.ImageSharp;
+using Steam.Interfaces;
 
 namespace Steam.Services
 {
