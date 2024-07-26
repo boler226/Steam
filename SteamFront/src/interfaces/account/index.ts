@@ -4,3 +4,8 @@ export interface IRegister {
     Email: string;
     Image: File;
 }
+
+export interface ILogin {
+    Email: string;
+    Password: string;
+}

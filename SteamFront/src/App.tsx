@@ -7,6 +7,7 @@ import './App.css';
 import NewsCreatePage from "./components/news/create/NewsCreatePage.tsx";
 import GameCreatePage from "./components/games/create/GameCreatePage.tsx";
 import UserRegisterPage from "./components/account/register/UserRegisterPage.tsx";
+import UserLoginPage from "./components/account/login/UserLoginPage.tsx";
 
 const { Content, Footer , Header} = Layout;
 
@@ -46,6 +47,7 @@ const App = () => {
                         <Route path="/createNews" element={<NewsCreatePage />} />
                         <Route path="/createGames" element={<GameCreatePage />} />
                         <Route path="/register" element={<UserRegisterPage />} />
+                        <Route path="/login" element={<UserLoginPage />} />
                     </Routes>
             </Content>
             <Footer className="footer">©2023 Created by boler</Footer>
