@@ -25,11 +25,13 @@ const UserLoginPage = () => {
             formData.append("Email", values.Email);
             formData.append("Password", values.Password);
 
-            await http_common.post("/api/Account/SignIn", formData, {
+            const response = await http_common.post("/api/Account/SignIn", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
+
             });
+            localStorage.setItem('token', response.data.accessToken);
             navigate(`/`);
         }
         catch  {

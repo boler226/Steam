@@ -8,10 +8,16 @@ import NewsCreatePage from "./components/news/create/NewsCreatePage.tsx";
 import GameCreatePage from "./components/games/create/GameCreatePage.tsx";
 import UserRegisterPage from "./components/account/register/UserRegisterPage.tsx";
 import UserLoginPage from "./components/account/login/UserLoginPage.tsx";
+import UserAccountPage from "./components/account/page/UserAccountPage.tsx";
+import PrivateRoute from "./config/PrivateRoute.tsx";
 
 const { Content, Footer , Header} = Layout;
 
 const App = () => {
+
+    const isAuthenticated = () => {
+        return !!localStorage.getItem('token');
+    };
 
   return (
     <Router>
@@ -48,6 +54,11 @@ const App = () => {
                         <Route path="/createGames" element={<GameCreatePage />} />
                         <Route path="/register" element={<UserRegisterPage />} />
                         <Route path="/login" element={<UserLoginPage />} />
+                        <Route path="/account" element={
+                            <PrivateRoute url="/login">
+                                <UserAccountPage />
+                            </PrivateRoute>
+                        } />
                     </Routes>
             </Content>
             <Footer className="footer">©2023 Created by boler</Footer>
