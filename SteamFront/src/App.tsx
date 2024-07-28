@@ -15,10 +15,6 @@ const { Content, Footer , Header} = Layout;
 
 const App = () => {
 
-    const isAuthenticated = () => {
-        return !!localStorage.getItem('token');
-    };
-
   return (
     <Router>
         <Layout style={{ backgroundColor: '#353c4e' }}>
