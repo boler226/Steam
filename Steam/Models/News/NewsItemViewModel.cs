@@ -1,4 +1,9 @@
-﻿using Steam.Models.Game;
+﻿using Steam.Data.Entities.Identity;
+using Steam.Models.Account;
+using Steam.Models.Game;
+using Steam.Models.Helpers;
+using Steam.Models.Pagination;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Steam.Models.News
 {
@@ -8,9 +13,11 @@ namespace Steam.Models.News
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DateOfRelease { get; set; }
-        public string Image {  get; set; }
-        public string VideoURL { get; set; }
-        public int GameId { get; set; }
-        public GameItemViewModel Game { get; set; } 
+        public string Image { get; set; }
+        public VideoGameViewModel Video { get; set; }
+        public int Rating { get; set; }
+        public List<CommentsViewModel> Comments { get; set; }
+        public GameItemViewModel Game { get; set; }
+        public UserViewModel UserOrDeveloper { get; set; }
     }
 }
