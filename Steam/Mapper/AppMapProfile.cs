@@ -17,24 +17,21 @@ namespace Steam.Mapper
         {
             _context = context;
 
-            CreateMap<RegisterViewModel, UserEntity>();
+            CreateMap<UserEntity, UserViewModel>();
+            CreateMap<CommentsEntity, CommentsViewModel>();
+            CreateMap<GameVideoEntity, VideoGameViewModel>();
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel, CategoryEntity>();
 
-            CreateMap<GameEntity, GameItemViewModel>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.GameCategories.Select(gc => gc.Category)))
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.GameImages.Select(gi => new GameImageViewModel
-                {
-                    Id = gi.Id,
-                    Name = gi.Name,
-                    Priority = gi.Priority
-                })))
-                .ForMember(dest => dest.News, opt => opt.MapFrom(src => src.News));
+            CreateMap<SystemRequirementsEntity, SystemRequirementsViewModel>();
+
+            CreateMap<GameEntity, GameItemViewModel>();
 
             CreateMap<GameCreateViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
-                .ForMember(dest => dest.GameImages, opt => opt.Ignore());
+                .ForMember(dest => dest.GameImages, opt => opt.Ignore())
+                .ForMember(dest => dest.SystemRequirements, opt => opt.Ignore());
 
             CreateMap<GameEditViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())

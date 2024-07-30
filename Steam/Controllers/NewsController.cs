@@ -87,7 +87,7 @@ namespace Steam.Controllers
 
             try
             {
-                news.Image = await imageService.SaveImageAsync(model.Image);
+                news.Image = await imageService.SaveImageAsync(model.ImageOrVideo);
                 await service.CreateAsync(model);
                 return Ok();
             }

@@ -24,7 +24,7 @@ namespace Steam.Services.ControllerServices
                 news.Title = model.Title;
                 news.Description = model.Description;
                 
-                news.Image = await imageService.SaveImageAsync(model.Image);
+                news.Image = await imageService.SaveImageAsync(model.ImageOrVideo);
                 news.DateOfRelease = DateTime.UtcNow;
                 news.GameId = model.GameId;
 
@@ -55,9 +55,9 @@ namespace Steam.Services.ControllerServices
                 if (model.Description != null)
                     news.Description = model.Description;
 
-                if(model.Image != null)
+                if(model.ImageOrVideo != null)
                 {
-                    news.Image = await imageService.SaveImageAsync(model.Image);
+                    news.Image = await imageService.SaveImageAsync(model.ImageOrVideo);
                     imageService.DeleteImageIfExists(oldImage);
                 }
 

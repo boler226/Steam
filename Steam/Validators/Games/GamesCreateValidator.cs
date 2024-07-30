@@ -26,11 +26,32 @@ namespace Steam.Validators.Games
                 .MaximumLength(4000)
                     .WithMessage("Description cannot be longer than 4000 characters.");
 
-            RuleFor(i => i.SystemRequirements)
+            RuleFor(i => i.SystemRequirements.OperatingSystem)
                 .NotEmpty()
-                    .WithMessage("System requirements is required.")
-                .MaximumLength(1000)
-                    .WithMessage("System requirements cannot be longer than 1000 characters.");
+                    .WithMessage("OperatingSystem is required.")
+                .MaximumLength(255)
+                    .WithMessage("OperatingSystem cannot be longer than 255 characters.");
+
+            RuleFor(i => i.SystemRequirements.Processor)
+                .NotEmpty()
+                    .WithMessage("OperatingSystem is required.")
+                .MaximumLength(255)
+                    .WithMessage("OperatingSystem cannot be longer than 255 characters.");
+
+            RuleFor(i => i.SystemRequirements.RAM)
+                .NotNull()
+                    .WithMessage("RAM is required.");
+
+            RuleFor(i => i.SystemRequirements.VideoCard)
+                .NotEmpty()
+                    .WithMessage("VideoCard is required.")
+                .MaximumLength(255)
+                    .WithMessage("VideoCard cannot be longer than 255 characters.");
+
+            RuleFor(i => i.SystemRequirements.DiskSpace)
+               .NotNull()
+                   .WithMessage("DiskSpace is required.");
+
 
             RuleFor(g => g.Categories)
                 .MustAsync(async (ids, cancellationToken) =>
@@ -44,14 +65,21 @@ namespace Steam.Validators.Games
                 })
                 .WithMessage("One or more selected category ids are invalid");
 
-            RuleFor(i => i.Images)
-                .NotNull()
-                    .WithMessage("Image is required.")
-                .DependentRules(() =>
-                {
-                    RuleFor(i => i.Images).MustAsync(imageValidator.IsValidImagesAsync)
-                        .WithMessage("One or more selected images are invalid");
-                });
+            RuleFor(i => i.ImagesAndVideos)
+          .NotNull()
+              .WithMessage("Images and videos are required.")
+          .Must(files => files.Any())
+              .WithMessage("At least one image or video is required.")
+          .DependentRules(() =>
+          {
+              RuleFor(i => i.ImagesAndVideos)
+                  .MustAsync(imageValidator.IsValidImagesAsync)
+                      .WithMessage("One or more selected images are invalid");
+
+              //RuleFor(i => i.ImagesAndVideos)
+              //    .MustAsync(videoValidator.IsValidVideosAsync)
+              //        .WithMessage("One or more selected videos are invalid");
+          });
         }
     }
 }
