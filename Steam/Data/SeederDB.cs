@@ -58,7 +58,6 @@ namespace Steam.Data
                     {
                         Email = "admin@gmail.com",
                         UserName = "SteamAdmin",
-                        Password = "123456"
                     };
                     var result = userManager.CreateAsync(user, "123456").Result;
                     if (result.Succeeded)
@@ -70,58 +69,58 @@ namespace Steam.Data
 
                 #region Додавання категорій
 
-                if (context.Categories.Count() < 10)
-                {
-                    var gameCategories = new[]
-                    {
-                            "Action", "Adventure", "RPG", "Strategy", "Shooter",
-                            "Puzzle", "Racing", "Simulation", "Sports", "Fighting"
-                        };
+                //if (context.Categories.Count() < 10)
+                //{
+                //    var gameCategories = new[]
+                //    {
+                //            "Action", "Adventure", "RPG", "Strategy", "Shooter",
+                //            "Puzzle", "Racing", "Simulation", "Sports", "Fighting"
+                //        };
 
-                    foreach (var categoryName in gameCategories)
-                    {
-                        var category = new CategoryEntity
-                        {
-                            Name = categoryName
-                        };
-                        context.Categories.Add(category);
-                    }
-                    context.SaveChanges();
-                }
+                //    foreach (var categoryName in gameCategories)
+                //    {
+                //        var category = new CategoryEntity
+                //        {
+                //            Name = categoryName
+                //        };
+                //        context.Categories.Add(category);
+                //    }
+                //    context.SaveChanges();
+                //}
 
-                if (context.Games.Count() < 10)
-                {
-                    var categoriesId = context.Categories.Select(c => c.Id).ToList();
+                //if (context.Games.Count() < 10)
+                //{
+                //    var categoriesId = context.Categories.Select(c => c.Id).ToList();
 
-                    var fakeGame = new Faker<GameEntity>("uk")
-                        .RuleFor(o => o.Name, f => f.Commerce.ProductName())
-                        .RuleFor(o => o.Price, f => Math.Round(f.Random.Decimal(10, 100), 2))
-                        .RuleFor(o => o.Description, f => f.Lorem.Paragraph())
-                        .RuleFor(o => o.DateOfRelease, f => f.Date.PastOffset(1).UtcDateTime)
-                        .RuleFor(o => o.SystemRequirements, f => f.Lorem.Sentence());
+                //    var fakeGame = new Faker<GameEntity>("uk")
+                //        .RuleFor(o => o.Name, f => f.Commerce.ProductName())
+                //        .RuleFor(o => o.Price, f => Math.Round(f.Random.Decimal(10, 100), 2))
+                //        .RuleFor(o => o.Description, f => f.Lorem.Paragraph())
+                //        .RuleFor(o => o.DateOfRelease, f => f.Date.PastOffset(1).UtcDateTime)
+                //        /*.RuleFor(o => o.SystemRequirements, f => f.Lorem.Sentence())*/;
 
-                    var games = fakeGame.Generate(10);
+                //    var games = fakeGame.Generate(10);
 
-                    foreach (var game in games)
-                    {
-                        context.Games.Add(game);
-                    }
-                    context.SaveChanges();
+                //    foreach (var game in games)
+                //    {
+                //        context.Games.Add(game);
+                //    }
+                //    context.SaveChanges();
 
-                    // Додавання зв'язків між іграми та категоріями
-                    foreach (var game in games)
-                    {
-                        foreach (var categoryId in categoriesId)
-                        {
-                            context.GameCategory.Add(new GameCategoryEntity
-                            {
-                                GameId = game.Id,
-                                CategoryId = categoryId
-                            });
-                        }
-                    }
-                    context.SaveChanges();
-                }
+                //    // Додавання зв'язків між іграми та категоріями
+                //    foreach (var game in games)
+                //    {
+                //        foreach (var categoryId in categoriesId)
+                //        {
+                //            context.GameCategory.Add(new GameCategoryEntity
+                //            {
+                //                GameId = game.Id,
+                //                CategoryId = categoryId
+                //            });
+                //        }
+                //    }
+                //    context.SaveChanges();
+                //}
 
                 #endregion
 

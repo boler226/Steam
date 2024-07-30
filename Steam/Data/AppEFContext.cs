@@ -16,8 +16,11 @@ namespace Steam.Data
         { }
 
         public DbSet<GameEntity> Games { get; set; }
+        public DbSet<CommentsEntity> Comments { get; set; }
+        public DbSet<SystemRequirementsEntity> SystemRequirements { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<GameCategoryEntity> GameCategory { get; set; }
+        public DbSet<GameVideoEntity> GameVideos { get; set; }
         public DbSet<GameImageEntity> GameImages { get; set; }
         public DbSet<NewsEntity> News { get; set; }
         public DbSet<UserGameEntity> UserGames { get; set; }
@@ -25,6 +28,32 @@ namespace Steam.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<GameEntity>(entity =>
+            {
+                entity.ToTable("tblGame");
+                entity.HasOne(g => g.Developer)
+                    .WithMany(u => u.Games)
+                    .HasForeignKey(g => g.DeveloperId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                entity.HasMany(g => g.Comments)
+                      .WithOne(c => c.Game)
+                      .HasForeignKey(c => c.GameId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(g => g.SystemRequirements)
+                    .WithOne(sr => sr.Game)
+                    .HasForeignKey<SystemRequirementsEntity>(sr => sr.GameId);
+            });
+
+
+            modelBuilder.Entity<UserEntity>(entity =>
+            {
+                entity.ToTable("tblUser");
+                entity.HasMany(u => u.News)
+                    .WithOne(n => n.UserOrDeveloper)
+                    .HasForeignKey(n => n.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<GameCategoryEntity>()
                 .HasKey(gc => new { gc.GameId, gc.CategoryId });
@@ -39,10 +68,20 @@ namespace Steam.Data
                 .WithMany(c => c.GameCategories)
                 .HasForeignKey(gc => gc.CategoryId);
 
-            modelBuilder.Entity<NewsEntity>()
-            .HasOne(n => n.Game)
-            .WithMany(g => g.News)
-            .HasForeignKey(n => n.GameId);
+            modelBuilder.Entity<NewsEntity>(entity =>
+            {
+                entity.ToTable("tblNews");
+                entity.HasOne(n => n.UserOrDeveloper)
+                      .WithMany(d => d.News)
+                      .HasForeignKey(n => n.UserId);
+                entity.HasOne(n => n.Game)
+                      .WithMany(g => g.News)
+                      .HasForeignKey(n => n.GameId);
+                entity.HasMany(n => n.Comments)
+                      .WithOne(c => c.News)
+                      .HasForeignKey(c => c.NewsId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
 
             modelBuilder.Entity<UserRoleEntity>(ur =>
             {
@@ -61,11 +100,6 @@ namespace Steam.Data
 
             modelBuilder.Entity<UserGameEntity>()
            .HasKey(ug => new { ug.UserId, ug.GameId });
-
-            modelBuilder.Entity<UserGameEntity>()
-                .HasOne(ug => ug.User)
-                .WithMany(u => u.UserGames)
-                .HasForeignKey(ug => ug.UserId);
 
             modelBuilder.Entity<UserGameEntity>()
                 .HasOne(ug => ug.Game)

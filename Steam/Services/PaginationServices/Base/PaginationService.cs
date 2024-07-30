@@ -8,7 +8,8 @@ namespace Steam.Services.PaginationServices.Base
 {
     public abstract class PaginationService <EntityType, EntityViewModelType, PaginationViewModelType>(
         IMapper mapper
-        ) : IPaginationService<EntityViewModelType, PaginationViewModelType> where PaginationViewModelType : PaginationViewModel
+        ) : IPaginationService<EntityViewModelType, PaginationViewModelType> 
+        where PaginationViewModelType : PaginationViewModel
     {
         public async Task<PageViewModel<EntityViewModelType>> GetPageAsync(PaginationViewModelType model)
         {

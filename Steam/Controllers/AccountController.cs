@@ -38,7 +38,7 @@ namespace Steam.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registraion([FromForm] RegisterViewModel model)
+        public async Task<IActionResult> Registration([FromForm] RegisterViewModel model)
         {
             var validatorResult = await validator.ValidateAsync(model);
 

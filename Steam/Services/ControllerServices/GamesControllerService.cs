@@ -24,7 +24,7 @@ namespace Steam.Services.ControllerServices
                 game.Name = model.Name;
                 game.Description = model.Description;
                 game.Price = model.Price;
-                game.SystemRequirements = model.SystemRequirements;
+                
 
                 if(model.Images != null && model.Images.Any())
                 {
@@ -75,8 +75,8 @@ namespace Steam.Services.ControllerServices
                 if (model.Description != null)
                     game.Description = model.Description;
 
-                if (model.SystemRequirements != null)
-                    game.SystemRequirements = model.SystemRequirements;
+                //if (model.SystemRequirements != null)
+                //    game.SystemRequirements = model.SystemRequirements;
 
                 if (model.Images.Any() && model.Images != null)
                 {
