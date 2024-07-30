@@ -51,7 +51,7 @@ namespace Steam.Data
                 entity.ToTable("tblUser");
                 entity.HasMany(u => u.News)
                     .WithOne(n => n.UserOrDeveloper)
-                    .HasForeignKey(n => n.UserId)
+                    .HasForeignKey(n => n.UserOrDeveloperId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -73,7 +73,7 @@ namespace Steam.Data
                 entity.ToTable("tblNews");
                 entity.HasOne(n => n.UserOrDeveloper)
                       .WithMany(d => d.News)
-                      .HasForeignKey(n => n.UserId);
+                      .HasForeignKey(n => n.UserOrDeveloperId);
                 entity.HasOne(n => n.Game)
                       .WithMany(g => g.News)
                       .HasForeignKey(n => n.GameId);

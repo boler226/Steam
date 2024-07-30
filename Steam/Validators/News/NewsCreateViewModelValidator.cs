@@ -8,9 +8,7 @@ namespace Steam.Validators.News
     {
         public NewsCreateViewModelValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
         {
-            RuleFor(g => g.GameId)
-                .MustAsync(checker.IsCorrectGameId)
-                .WithMessage("Game with this id is not exists");
+          
 
             RuleFor(i => i.Title)
                 .NotEmpty()

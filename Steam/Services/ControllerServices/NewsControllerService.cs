@@ -23,17 +23,27 @@ namespace Steam.Services.ControllerServices
             {
                 news.Title = model.Title;
                 news.Description = model.Description;
-                
-                news.Image = await imageService.SaveImageAsync(model.ImageOrVideo);
+
+                if (model.ImageOrVideo.ContentType.StartsWith("image")) 
+                {
+                    news.ImageOrVideo = await imageService.SaveImageAsync(model.ImageOrVideo);
+                }
+                else if (model.ImageOrVideo.ContentType.StartsWith("video"))
+                {
+
+                }
+
+                news.Rating = 0;
                 news.DateOfRelease = DateTime.UtcNow;
                 news.GameId = model.GameId;
+                news.UserOrDeveloperId = model.UserOrDeveloperId;
 
                 await context.News.AddAsync(news);
                 await context.SaveChangesAsync();
             }
             catch (Exception)
             {
-                imageService.DeleteImageIfExists(news.Image);
+                imageService.DeleteImageIfExists(news.ImageOrVideo);
                 throw new Exception("Error news created!");
             }
         }
@@ -47,7 +57,7 @@ namespace Steam.Services.ControllerServices
                 if (news is null)
                     throw new Exception("News not found.");
 
-                var oldImage = news.Image;
+                var oldImage = news.ImageOrVideo;
 
                 if(model.Title != null)
                     news.Title = model.Title;
@@ -57,7 +67,7 @@ namespace Steam.Services.ControllerServices
 
                 if(model.ImageOrVideo != null)
                 {
-                    news.Image = await imageService.SaveImageAsync(model.ImageOrVideo);
+                    news.ImageOrVideo = await imageService.SaveImageAsync(model.ImageOrVideo);
                     imageService.DeleteImageIfExists(oldImage);
                 }
 
@@ -72,7 +82,7 @@ namespace Steam.Services.ControllerServices
             }
             catch (Exception)
             {
-                imageService.DeleteImageIfExists(news.Image);
+                imageService.DeleteImageIfExists(news.ImageOrVideo);
                 throw new Exception("Error news update!");
             }
         }
@@ -86,7 +96,7 @@ namespace Steam.Services.ControllerServices
                 if (news == null)
                     throw new Exception("News not found!");
 
-                imageService.DeleteImageIfExists(news.Image);
+                imageService.DeleteImageIfExists(news.ImageOrVideo);
                 context.News.Remove(news);
                 await context.SaveChangesAsync();
             } 

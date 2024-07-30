@@ -14,19 +14,15 @@ namespace Steam.Data.Entities
         [Required]
         public DateTime DateOfRelease { get; set; }
         [Required, StringLength(500)]
-        public string Image { get; set; }
-        [Required, StringLength(500)]
-        public GameVideoEntity Video { get; set; }
+        public string ImageOrVideo { get; set; }
         [Required]
         public int Rating { get; set; }
-       
         public virtual ICollection<CommentsEntity> Comments { get; set; } = new List<CommentsEntity>();
-
-        public int GameId { get; set; }
+        public int? GameId { get; set; }
         [ForeignKey("GameId")]
         public virtual GameEntity Game { get; set; }
 
-        public int UserId { get; set; }
+        public int UserOrDeveloperId { get; set; }
         [ForeignKey("UserId")]
         public virtual UserEntity UserOrDeveloper { get; set; }
 
