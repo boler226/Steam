@@ -1,12 +1,15 @@
 import {INewsItem} from "../news";
+import {IUser, IComments} from "../account";
 
 export interface IGameItem {
     id: number;
     name: string;
     price: number;
-    systemRequirements: string;
+    systemRequirements: ISystemRequirements;
+    developer: IUser;
     dateOfRelease: Date;
     news: INewsItem[];
+    comments: IComments[];
     categories: ICategoryItem[];
     images: IImageItem[];
 }
@@ -15,7 +18,7 @@ export interface IGameCreate {
     name: string;
     price: number;
     description: string;
-    systemRequirements: string;
+    systemRequirements: ISystemRequirements;
     categories: number[];
     images: File[];
 }
@@ -30,3 +33,14 @@ export interface IImageItem {
     name: string;
     priority: string;
 }
+
+export interface ISystemRequirements {
+    id: number;
+    operatingSystem: string;
+    processor: string;
+    RAM: number;
+    videoCard: string;
+    diskSpace: number;
+}
+
+

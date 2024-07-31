@@ -17,10 +17,8 @@ namespace Steam.Models.Game
         public SystemRequirementsViewModel SystemRequirements { get; set; }
         public UserViewModel Developer { get; set; }
         public IEnumerable<CommentsViewModel> Comments { get; set; }
-        public IEnumerable<VideoGameViewModel> GameVideos { get; set; }
-        // public List<UserViewModel> UserGames { get; set; }
         public IEnumerable<CategoryItemViewModel> Categories { get; set; }
-        public IEnumerable<GameImageViewModel> Images { get; set; }
+        public IEnumerable<FilesViewModel> Files { get; set; }
         public IEnumerable<NewsItemViewModel> News { get; set; }
     }
 }

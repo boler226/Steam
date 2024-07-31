@@ -19,7 +19,6 @@ namespace Steam.Mapper
 
             CreateMap<UserEntity, UserViewModel>();
             CreateMap<CommentsEntity, CommentsViewModel>();
-            CreateMap<GameVideoEntity, VideoGameViewModel>();
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
             CreateMap<CategoryCreateViewModel, CategoryEntity>();
@@ -30,12 +29,12 @@ namespace Steam.Mapper
 
             CreateMap<GameCreateViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
-                .ForMember(dest => dest.GameImages, opt => opt.Ignore())
+                .ForMember(dest => dest.GameFiles, opt => opt.Ignore())
                 .ForMember(dest => dest.SystemRequirements, opt => opt.Ignore());
 
             CreateMap<GameEditViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
-                .ForMember(dest => dest.GameImages, opt => opt.Ignore());
+                .ForMember(dest => dest.GameFiles, opt => opt.Ignore());
 
             CreateMap<NewsEntity, NewsItemViewModel>();
 

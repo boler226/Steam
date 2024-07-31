@@ -26,8 +26,7 @@ namespace Steam.Data.Entities
         public virtual SystemRequirementsEntity SystemRequirements { get; set; }
 
         public virtual ICollection<GameCategoryEntity> GameCategories { get; set; } = new List<GameCategoryEntity>();
-        public virtual ICollection<GameVideoEntity> GameVideos { get; set; } = new List<GameVideoEntity>();
-        public virtual ICollection<GameImageEntity> GameImages { get; set; } = new List<GameImageEntity>();
+        public virtual ICollection<GameFiles> GameFiles { get; set; } = new List<GameFiles>();
         public virtual ICollection<NewsEntity> News { get; set; } = new List<NewsEntity>();
         public virtual ICollection<UserGameEntity> UserGames { get; set; } = new List<UserGameEntity>();
     }

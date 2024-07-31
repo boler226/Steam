@@ -41,7 +41,7 @@ namespace Steam.Services.ControllerServices
                 {
                     foreach (var file in model.ImagesAndVideos)
                     {
-                         game.GameImages.Add(new GameImageEntity
+                         game.GameFiles.Add(new GameFiles
                          {
                              Name = await imageService.SaveImageAsync(file),
                          });
@@ -91,10 +91,10 @@ namespace Steam.Services.ControllerServices
 
                 if (model.ImagesAndVideos.Any() && model.ImagesAndVideos != null)
                 {
-                    foreach (var image in game.GameImages)
+                    foreach (var image in game.GameFiles)
                         imageService.DeleteImageIfExists(image.Name);
 
-                    game.GameImages.Clear();
+                    game.GameFiles.Clear();
                 }
 
                 if (model.ImagesAndVideos != null && model.ImagesAndVideos.Any())
@@ -102,7 +102,7 @@ namespace Steam.Services.ControllerServices
                     //int priorityIndex = 1;
                     foreach (var image in model.ImagesAndVideos)
                     {
-                        game.GameImages.Add(new GameImageEntity {
+                        game.GameFiles.Add(new GameFiles {
                             Name = await imageService.SaveImageAsync(image),
                         });
                     }
@@ -138,7 +138,7 @@ namespace Steam.Services.ControllerServices
                 if (game is null)
                     throw new Exception("Game not found!");
 
-                foreach (var image in game.GameImages)
+                foreach (var image in game.GameFiles)
                     imageService.DeleteImageIfExists(image.Name);
 
                 context.Games.Remove(game);

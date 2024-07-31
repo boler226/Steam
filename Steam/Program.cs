@@ -100,8 +100,6 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 
-builder.Services.AddTransient<IVideoService, VideoService>();
-
 builder.Services.AddTransient<IAccountsControllerService, AccountsControllerService>();
 
 builder.Services.AddTransient<INewsControllerService, NewsControllerService>();

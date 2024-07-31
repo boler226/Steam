@@ -20,8 +20,7 @@ namespace Steam.Data
         public DbSet<SystemRequirementsEntity> SystemRequirements { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<GameCategoryEntity> GameCategory { get; set; }
-        public DbSet<GameVideoEntity> GameVideos { get; set; }
-        public DbSet<GameImageEntity> GameImages { get; set; }
+        public DbSet<GameFiles> GameFiles { get; set; }
         public DbSet<NewsEntity> News { get; set; }
         public DbSet<UserGameEntity> UserGames { get; set; }
 

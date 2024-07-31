@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Steam.Data.Entities
 {
-    [Table("tblGameVideo")]
-    public class GameVideoEntity : BaseEntity<int>
+    [Table("tblGameFiles")]
+    public class GameFiles : BaseEntity<int>
     {
         [Required, StringLength(255)]
         public string Name { get; set; }
