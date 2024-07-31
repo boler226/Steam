@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Steam.Data;
 using Steam.Data.Entities;
 using Steam.Models.News;
@@ -11,12 +12,15 @@ namespace Steam.Services.PaginationServices
         IMapper mapper
         ) : PaginationService<NewsEntity, NewsItemViewModel, NewsFilterViewModel>(mapper)
     {
-        protected override IQueryable<NewsEntity> GetQuery() => context.News.OrderBy(n => n.Id);
+        protected override IQueryable<NewsEntity> GetQuery()
+        {
+            return context.News.AsQueryable();
+        }
 
         protected override IQueryable<NewsEntity> FilterQuery(IQueryable<NewsEntity> query, NewsFilterViewModel model)
         {
-            if (model.ByRelease is not null)
-                query.OrderByDescending(n => n.DateOfRelease);
+            if (model.ByRelease.HasValue && model.ByRelease.Value)
+                query = query.OrderByDescending(n => n.DateOfRelease);
 
             return query; 
         }

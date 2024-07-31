@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Steam.Data;
@@ -11,9 +12,11 @@ using Steam.Data;
 namespace Steam.Migrations
 {
     [DbContext(typeof(AppEFContext))]
-    partial class AppEFContextModelSnapshot : ModelSnapshot
+    [Migration("20240730165842_update tblComments")]
+    partial class updatetblComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,7 +419,7 @@ namespace Steam.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("character varying(4000)");
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ImageOrVideo")
@@ -438,14 +441,11 @@ namespace Steam.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserOrDeveloperId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserOrDeveloperId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("tblNews", (string)null);
                 });
@@ -644,11 +644,13 @@ namespace Steam.Migrations
                 {
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
                         .WithMany("News")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "UserOrDeveloper")
                         .WithMany("News")
-                        .HasForeignKey("UserOrDeveloperId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

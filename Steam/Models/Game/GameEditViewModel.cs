@@ -6,10 +6,10 @@ namespace Steam.Models.Game
     {
         public int Id { get; set; } 
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public int Price { get; set; }
         public string Description { get; set; }
-        public string SystemRequirements { get; set; }
+        public SystemRequirementsViewModel SystemRequirements { get; set; }
         public List<int> CategoryIds { get; set; }
-        public IEnumerable<IFormFile> Images { get; set; }
+        public IEnumerable<IFormFile> ImagesAndVideos { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Steam.Data;
@@ -11,9 +12,11 @@ using Steam.Data;
 namespace Steam.Migrations
 {
     [DbContext(typeof(AppEFContext))]
-    partial class AppEFContextModelSnapshot : ModelSnapshot
+    [Migration("20240729162045_update tbl's Game User News")]
+    partial class updatetblsGameUserNews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,13 +151,13 @@ namespace Steam.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("NewsId")
+                    b.Property<int>("NewsId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Rating")
@@ -359,7 +362,6 @@ namespace Steam.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Photo")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
@@ -416,10 +418,10 @@ namespace Steam.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("character varying(4000)");
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ImageOrVideo")
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
@@ -438,14 +440,16 @@ namespace Steam.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserOrDeveloperId")
+                    b.Property<int>("VideoId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("UserOrDeveloperId");
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VideoId");
 
                     b.ToTable("tblNews", (string)null);
                 });
@@ -549,12 +553,14 @@ namespace Steam.Migrations
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
                         .WithMany("Comments")
                         .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steam.Data.Entities.NewsEntity", "News")
                         .WithMany("Comments")
                         .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "User")
                         .WithMany()
@@ -644,17 +650,27 @@ namespace Steam.Migrations
                 {
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
                         .WithMany("News")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "UserOrDeveloper")
                         .WithMany("News")
-                        .HasForeignKey("UserOrDeveloperId")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Steam.Data.Entities.GameVideoEntity", "Video")
+                        .WithMany()
+                        .HasForeignKey("VideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
 
                     b.Navigation("UserOrDeveloper");
+
+                    b.Navigation("Video");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.SystemRequirementsEntity", b =>
@@ -704,8 +720,7 @@ namespace Steam.Migrations
 
                     b.Navigation("News");
 
-                    b.Navigation("SystemRequirements")
-                        .IsRequired();
+                    b.Navigation("SystemRequirements");
 
                     b.Navigation("UserGames");
                 });

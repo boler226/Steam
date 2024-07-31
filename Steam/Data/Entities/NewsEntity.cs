@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Steam.Data.Entities.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Steam.Data.Entities
@@ -13,11 +14,17 @@ namespace Steam.Data.Entities
         [Required]
         public DateTime DateOfRelease { get; set; }
         [Required, StringLength(500)]
-        public string Image { get; set; }
-        [Required, StringLength(500)]
-        public string VideoURL { get; set; }
+        public string ImageOrVideo { get; set; }
         [Required]
-        public int GameId { get; set; }
+        public int Rating { get; set; }
+        public virtual ICollection<CommentsEntity> Comments { get; set; } = new List<CommentsEntity>();
+        public int? GameId { get; set; }
+        [ForeignKey("GameId")]
         public virtual GameEntity Game { get; set; }
+
+        public int UserOrDeveloperId { get; set; }
+        [ForeignKey("UserId")]
+        public virtual UserEntity UserOrDeveloper { get; set; }
+
     }
 }

@@ -4,15 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Steam.Data.Entities.Identity
 {
-    [Table("tblUser")]
+    [Table("tblUser")] 
     public class UserEntity : IdentityUser<int>
-    {
-        [Required, StringLength(100)]
-        public string Password { get; set; }
-       
-        [StringLength(2500)]
+    {  
+        [StringLength(1000)]
         public string Photo { get; set; }
         public virtual ICollection<UserRoleEntity> UserRoles { get; set; }
-        public virtual ICollection<UserGameEntity> UserGames { get; set; }
+        public virtual ICollection<UserGameEntity> UserGames { get; set; } = new List<UserGameEntity>();
+        public virtual ICollection<NewsEntity> News { get; set; } = new List<NewsEntity>();
+        public virtual ICollection<GameEntity> Games { get; set; } = new List<GameEntity>();
+
+
     }
 }

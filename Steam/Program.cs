@@ -16,6 +16,8 @@ using Steam.Services.ControllerServices;
 using Steam.Models.News;
 using Steam.Services.PaginationServices;
 using Steam.Models.Game;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,9 +71,14 @@ builder.Services.AddLogging(config =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:5177")
+        builder => builder.AllowAnyOrigin()
                           .AllowAnyHeader()
                           .AllowAnyMethod());
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 1048576000; // if don't set default value is: 1000 MB 
 });
 
 builder.Services.AddControllers();
@@ -89,8 +96,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
+
+builder.Services.AddTransient<IVideoService, VideoService>();
 
 builder.Services.AddTransient<IAccountsControllerService, AccountsControllerService>();
 
@@ -105,26 +115,40 @@ builder.Services.AddTransient<IPaginationService<GameItemViewModel, GameFilterVi
 
 var app = builder.Build();
 
+app.UseCors("AllowSpecificOrigin");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-var dir = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["ImagesDir"]);
+var imageDir = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["ImagesDir"]);
 
-if (!Directory.Exists(dir))
+if (!Directory.Exists(imageDir))
 {
-    Directory.CreateDirectory(dir);
+    Directory.CreateDirectory(imageDir);
 }
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(dir),
+    FileProvider = new PhysicalFileProvider(imageDir),
     RequestPath = "/images"
 });
 
-app.UseCors("AllowSpecificOrigin"); 
+var videoDir = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["VideosDir"]);
+
+if (!Directory.Exists(videoDir))
+{
+    Directory.CreateDirectory(videoDir);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(videoDir),
+    RequestPath = "/videos"
+});
+
 
 app.UseAuthentication();
 app.UseAuthorization();

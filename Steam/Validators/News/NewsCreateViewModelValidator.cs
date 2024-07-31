@@ -8,9 +8,7 @@ namespace Steam.Validators.News
     {
         public NewsCreateViewModelValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
         {
-            RuleFor(g => g.GameId)
-                .MustAsync(checker.IsCorrectGameId)
-                .WithMessage("Game with this id is not exists");
+          
 
             RuleFor(i => i.Title)
                 .NotEmpty()
@@ -24,13 +22,13 @@ namespace Steam.Validators.News
                 .MaximumLength(4000)
                 .WithMessage("Description cannot be longer than 4000 characters.");
 
-            RuleFor(i => i.Image)
+            RuleFor(i => i.ImageOrVideo)
                 .NotNull()
-                .WithMessage("Image is required.")
+                .WithMessage("Image or video is required.")
                 .DependentRules(() =>
                 {
-                    RuleFor(i => i.Image).MustAsync(imageValidator.IsValidImageAsync)
-                    .WithMessage("Image is not valid.");
+                    RuleFor(i => i.ImageOrVideo).MustAsync(imageValidator.IsValidImageAsync)
+                    .WithMessage("Image or video valid.");
                 });
         }
     }

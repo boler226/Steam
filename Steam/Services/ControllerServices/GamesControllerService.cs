@@ -24,16 +24,27 @@ namespace Steam.Services.ControllerServices
                 game.Name = model.Name;
                 game.Description = model.Description;
                 game.Price = model.Price;
-                game.SystemRequirements = model.SystemRequirements;
+                game.DeveloperId = model.DeveloperId;
+                game.Rating = 0;
 
-                if(model.Images != null && model.Images.Any())
+                game.SystemRequirements = new SystemRequirementsEntity
                 {
-                    foreach (var image in model.Images)
+                    OperatingSystem = model.SystemRequirements.OperatingSystem,
+                    Processor = model.SystemRequirements.Processor,
+                    RAM = model.SystemRequirements.RAM,
+                    VideoCard = model.SystemRequirements.VideoCard,
+                    DiskSpace = model.SystemRequirements.DiskSpace
+                };
+
+
+                if (model.ImagesAndVideos != null && model.ImagesAndVideos.Any())
+                {
+                    foreach (var file in model.ImagesAndVideos)
                     {
-                        game.GameImages.Add(new GameImageEntity
-                        {
-                            Name = await imageService.SaveImageAsync(image),
-                        });
+                         game.GameImages.Add(new GameImageEntity
+                         {
+                             Name = await imageService.SaveImageAsync(file),
+                         });
                     }
                 }
 
@@ -75,10 +86,10 @@ namespace Steam.Services.ControllerServices
                 if (model.Description != null)
                     game.Description = model.Description;
 
-                if (model.SystemRequirements != null)
-                    game.SystemRequirements = model.SystemRequirements;
+                //if (model.SystemRequirements != null)
+                //    game.SystemRequirements = model.SystemRequirements;
 
-                if (model.Images.Any() && model.Images != null)
+                if (model.ImagesAndVideos.Any() && model.ImagesAndVideos != null)
                 {
                     foreach (var image in game.GameImages)
                         imageService.DeleteImageIfExists(image.Name);
@@ -86,10 +97,10 @@ namespace Steam.Services.ControllerServices
                     game.GameImages.Clear();
                 }
 
-                if (model.Images != null && model.Images.Any())
+                if (model.ImagesAndVideos != null && model.ImagesAndVideos.Any())
                 {
                     //int priorityIndex = 1;
-                    foreach (var image in model.Images)
+                    foreach (var image in model.ImagesAndVideos)
                     {
                         game.GameImages.Add(new GameImageEntity {
                             Name = await imageService.SaveImageAsync(image),
