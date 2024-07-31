@@ -41,17 +41,10 @@ namespace Steam.Services.ControllerServices
                 {
                     foreach (var file in model.ImagesAndVideos)
                     {
-                        if (file.ContentType.StartsWith("image"))
-                        {
-                            game.GameImages.Add(new GameImageEntity
-                            {
-                                Name = await imageService.SaveImageAsync(file),
-                            });
-                        }
-                        else if (file.ContentType.StartsWith("video"))
-                        {
-
-                        }
+                         game.GameImages.Add(new GameImageEntity
+                         {
+                             Name = await imageService.SaveImageAsync(file),
+                         });
                     }
                 }
 

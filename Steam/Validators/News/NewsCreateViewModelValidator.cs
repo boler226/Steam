@@ -24,11 +24,11 @@ namespace Steam.Validators.News
 
             RuleFor(i => i.ImageOrVideo)
                 .NotNull()
-                .WithMessage("Image is required.")
+                .WithMessage("Image or video is required.")
                 .DependentRules(() =>
                 {
                     RuleFor(i => i.ImageOrVideo).MustAsync(imageValidator.IsValidImageAsync)
-                    .WithMessage("Image is not valid.");
+                    .WithMessage("Image or video valid.");
                 });
         }
     }

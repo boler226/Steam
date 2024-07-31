@@ -24,14 +24,8 @@ namespace Steam.Services.ControllerServices
                 news.Title = model.Title;
                 news.Description = model.Description;
 
-                if (model.ImageOrVideo.ContentType.StartsWith("image")) 
-                {
+                if(model.ImageOrVideo != null)
                     news.ImageOrVideo = await imageService.SaveImageAsync(model.ImageOrVideo);
-                }
-                else if (model.ImageOrVideo.ContentType.StartsWith("video"))
-                {
-
-                }
 
                 news.Rating = 0;
                 news.DateOfRelease = DateTime.UtcNow;

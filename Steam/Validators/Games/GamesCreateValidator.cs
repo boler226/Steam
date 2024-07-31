@@ -75,10 +75,6 @@ namespace Steam.Validators.Games
               RuleFor(i => i.ImagesAndVideos)
                   .MustAsync(imageValidator.IsValidImagesAsync)
                       .WithMessage("One or more selected images are invalid");
-
-              //RuleFor(i => i.ImagesAndVideos)
-              //    .MustAsync(videoValidator.IsValidVideosAsync)
-              //        .WithMessage("One or more selected videos are invalid");
           });
         }
     }
