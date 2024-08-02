@@ -8,27 +8,27 @@ namespace Steam.Data.Entities
     public class GameEntity : BaseEntity<int>
     {
         [Required, StringLength(255)]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         [Required]
         public int Price { get; set; }
-        [Required, StringLength(1000)]
-        public string Description { get; set; }
+        [Required, StringLength(2000)]
+        public string Description { get; set; } = null!;
         [Required]
         public DateTime DateOfRelease { get; set; }
         [Required]
         public int Rating { get; set; }
-        public virtual ICollection<CommentsEntity> Comments { get; set; } = new List<CommentsEntity>();
-
+        public ICollection<GameCommentEntity> GameComments { get; set; } = new List<GameCommentEntity>();
+        [Required]
         public int DeveloperId { get; set; }
         [ForeignKey("DeveloperId")]
-        public virtual UserEntity Developer { get; set; }
+        public UserEntity Developer { get; set; } = null!;
 
-        public virtual SystemRequirementsEntity SystemRequirements { get; set; }
+        public SystemRequirementsEntity SystemRequirements { get; set; } = null!;
+        public DiscountEntity Discount { get; set; } = null!;
 
-        public virtual ICollection<GameCategoryEntity> GameCategories { get; set; } = new List<GameCategoryEntity>();
-        public virtual ICollection<GameVideoEntity> GameVideos { get; set; } = new List<GameVideoEntity>();
-        public virtual ICollection<GameImageEntity> GameImages { get; set; } = new List<GameImageEntity>();
-        public virtual ICollection<NewsEntity> News { get; set; } = new List<NewsEntity>();
-        public virtual ICollection<UserGameEntity> UserGames { get; set; } = new List<UserGameEntity>();
+        public ICollection<GameCategoryEntity> GameCategories { get; set; } = new List<GameCategoryEntity>();
+        public  ICollection<GameMediaEntity> GameMedia { get; set; } = new List<GameMediaEntity>();
+        public ICollection<NewsEntity> News { get; set; } = new List<NewsEntity>();
+        public ICollection<UserGameEntity> UserGames { get; set; } = new List<UserGameEntity>();
     }
 }

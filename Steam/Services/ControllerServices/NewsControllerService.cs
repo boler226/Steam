@@ -25,7 +25,7 @@ namespace Steam.Services.ControllerServices
                 news.Description = model.Description;
 
                 if(model.ImageOrVideo != null)
-                    news.ImageOrVideo = await imageService.SaveImageAsync(model.ImageOrVideo);
+                    //news.NewsMedia = await imageService.SaveImageAsync(model.ImageOrVideo);
 
                 news.Rating = 0;
                 news.DateOfRelease = DateTime.UtcNow;
@@ -37,7 +37,7 @@ namespace Steam.Services.ControllerServices
             }
             catch (Exception)
             {
-                imageService.DeleteImageIfExists(news.ImageOrVideo);
+                //imageService.DeleteImageIfExists(news.NewsMedia);
                 throw new Exception("Error news created!");
             }
         }
@@ -51,7 +51,7 @@ namespace Steam.Services.ControllerServices
                 if (news is null)
                     throw new Exception("News not found.");
 
-                var oldImage = news.ImageOrVideo;
+                var oldImage = news.NewsMedia;
 
                 if(model.Title != null)
                     news.Title = model.Title;
@@ -61,8 +61,8 @@ namespace Steam.Services.ControllerServices
 
                 if(model.ImageOrVideo != null)
                 {
-                    news.ImageOrVideo = await imageService.SaveImageAsync(model.ImageOrVideo);
-                    imageService.DeleteImageIfExists(oldImage);
+                    //news.NewsMedia = await imageService.SaveImageAsync(model.ImageOrVideo);
+                    //imageService.DeleteImageIfExists(oldImage);
                 }
 
               
@@ -76,7 +76,7 @@ namespace Steam.Services.ControllerServices
             }
             catch (Exception)
             {
-                imageService.DeleteImageIfExists(news.ImageOrVideo);
+                //imageService.DeleteImageIfExists(news.NewsMedia);
                 throw new Exception("Error news update!");
             }
         }
@@ -90,7 +90,7 @@ namespace Steam.Services.ControllerServices
                 if (news == null)
                     throw new Exception("News not found!");
 
-                imageService.DeleteImageIfExists(news.ImageOrVideo);
+                //imageService.DeleteImageIfExists(news.NewsMedia);
                 context.News.Remove(news);
                 await context.SaveChangesAsync();
             } 

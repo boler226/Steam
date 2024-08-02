@@ -135,7 +135,7 @@ namespace Steam.Migrations
                     b.ToTable("tblCategory");
                 });
 
-            modelBuilder.Entity("Steam.Data.Entities.CommentsEntity", b =>
+            modelBuilder.Entity("Steam.Data.Entities.CommentEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,14 +148,8 @@ namespace Steam.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int?>("GameId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<int?>("NewsId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
@@ -165,13 +159,55 @@ namespace Steam.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("NewsId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("tblComment", (string)null);
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.DeveloperGameEntity", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("tblDeveloperGame");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.DiscountEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DiscountEndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DiscountPercentage")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("DiscountStartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId")
+                        .IsUnique();
+
+                    b.ToTable("tblDiscount");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.GameCategoryEntity", b =>
@@ -189,6 +225,21 @@ namespace Steam.Migrations
                     b.ToTable("tblGameCategory");
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.GameCommentEntity", b =>
+                {
+                    b.Property<int>("GameId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("GameId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("tblGameComments");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.GameEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -202,8 +253,8 @@ namespace Steam.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
 
                     b.Property<int>("DeveloperId")
                         .HasColumnType("integer");
@@ -226,62 +277,28 @@ namespace Steam.Migrations
 
                     b.HasIndex("DeveloperId");
 
-                    b.ToTable("tblGame", (string)null);
+                    b.ToTable("tblGame");
                 });
 
-            modelBuilder.Entity("Steam.Data.Entities.GameImageEntity", b =>
+            modelBuilder.Entity("Steam.Data.Entities.GameMediaEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<int>("MediaId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("GameId")
+                    b.Property<int>("Id")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                    b.HasKey("GameId", "MediaId");
 
-                    b.Property<byte>("Priority")
-                        .HasColumnType("smallint");
+                    b.HasIndex("MediaId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("tblGameImage");
-                });
-
-            modelBuilder.Entity("Steam.Data.Entities.GameVideoEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("tblGameVideo");
+                    b.ToTable("tblGameMedia");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.Identity.RoleEntity", b =>
@@ -360,8 +377,8 @@ namespace Steam.Migrations
 
                     b.Property<string>("Photo")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -400,6 +417,45 @@ namespace Steam.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.MediaEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblMedia");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.NewsCommentEntity", b =>
+                {
+                    b.Property<int>("NewsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CommentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("NewsId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("tblNewsComments");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.NewsEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -419,11 +475,6 @@ namespace Steam.Migrations
                     b.Property<int?>("GameId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ImageOrVideo")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -435,9 +486,6 @@ namespace Steam.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("UserOrDeveloperId")
                         .HasColumnType("integer");
 
@@ -447,7 +495,22 @@ namespace Steam.Migrations
 
                     b.HasIndex("UserOrDeveloperId");
 
-                    b.ToTable("tblNews", (string)null);
+                    b.ToTable("tblNews");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.NewsMediaEntity", b =>
+                {
+                    b.Property<int>("NewsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MediaId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("NewsId", "MediaId");
+
+                    b.HasIndex("MediaId");
+
+                    b.ToTable("tblNewsMedia");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.SystemRequirementsEntity", b =>
@@ -544,29 +607,45 @@ namespace Steam.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Steam.Data.Entities.CommentsEntity", b =>
+            modelBuilder.Entity("Steam.Data.Entities.CommentEntity", b =>
                 {
-                    b.HasOne("Steam.Data.Entities.GameEntity", "Game")
-                        .WithMany("Comments")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Steam.Data.Entities.NewsEntity", "News")
-                        .WithMany("Comments")
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.DeveloperGameEntity", b =>
+                {
+                    b.HasOne("Steam.Data.Entities.GameEntity", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Steam.Data.Entities.Identity.UserEntity", "User")
+                        .WithMany("DevelopedGames")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Game");
 
-                    b.Navigation("News");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.DiscountEntity", b =>
+                {
+                    b.HasOne("Steam.Data.Entities.GameEntity", "Game")
+                        .WithOne("Discount")
+                        .HasForeignKey("Steam.Data.Entities.DiscountEntity", "GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.GameCategoryEntity", b =>
@@ -588,37 +667,53 @@ namespace Steam.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.GameCommentEntity", b =>
+                {
+                    b.HasOne("Steam.Data.Entities.CommentEntity", "Comment")
+                        .WithMany("GameComments")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Steam.Data.Entities.GameEntity", "Game")
+                        .WithMany("GameComments")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("Game");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.GameEntity", b =>
                 {
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "Developer")
-                        .WithMany("Games")
+                        .WithMany()
                         .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Developer");
                 });
 
-            modelBuilder.Entity("Steam.Data.Entities.GameImageEntity", b =>
+            modelBuilder.Entity("Steam.Data.Entities.GameMediaEntity", b =>
                 {
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
-                        .WithMany("GameImages")
+                        .WithMany("GameMedia")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Game");
-                });
-
-            modelBuilder.Entity("Steam.Data.Entities.GameVideoEntity", b =>
-                {
-                    b.HasOne("Steam.Data.Entities.GameEntity", "Game")
-                        .WithMany("GameVideos")
-                        .HasForeignKey("GameId")
+                    b.HasOne("Steam.Data.Entities.MediaEntity", "Media")
+                        .WithMany("GameMedia")
+                        .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
+
+                    b.Navigation("Media");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.Identity.UserRoleEntity", b =>
@@ -640,21 +735,60 @@ namespace Steam.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.NewsCommentEntity", b =>
+                {
+                    b.HasOne("Steam.Data.Entities.CommentEntity", "Comment")
+                        .WithMany("NewsComments")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Steam.Data.Entities.NewsEntity", "News")
+                        .WithMany("NewsComments")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("News");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.NewsEntity", b =>
                 {
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
                         .WithMany("News")
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "UserOrDeveloper")
                         .WithMany("News")
                         .HasForeignKey("UserOrDeveloperId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Game");
 
                     b.Navigation("UserOrDeveloper");
+                });
+
+            modelBuilder.Entity("Steam.Data.Entities.NewsMediaEntity", b =>
+                {
+                    b.HasOne("Steam.Data.Entities.MediaEntity", "Media")
+                        .WithMany("NewsMedia")
+                        .HasForeignKey("MediaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Steam.Data.Entities.NewsEntity", "News")
+                        .WithMany("NewsMedia")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Media");
+
+                    b.Navigation("News");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.SystemRequirementsEntity", b =>
@@ -692,15 +826,23 @@ namespace Steam.Migrations
                     b.Navigation("GameCategories");
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.CommentEntity", b =>
+                {
+                    b.Navigation("GameComments");
+
+                    b.Navigation("NewsComments");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.GameEntity", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("Discount")
+                        .IsRequired();
 
                     b.Navigation("GameCategories");
 
-                    b.Navigation("GameImages");
+                    b.Navigation("GameComments");
 
-                    b.Navigation("GameVideos");
+                    b.Navigation("GameMedia");
 
                     b.Navigation("News");
 
@@ -717,7 +859,7 @@ namespace Steam.Migrations
 
             modelBuilder.Entity("Steam.Data.Entities.Identity.UserEntity", b =>
                 {
-                    b.Navigation("Games");
+                    b.Navigation("DevelopedGames");
 
                     b.Navigation("News");
 
@@ -726,9 +868,18 @@ namespace Steam.Migrations
                     b.Navigation("UserRoles");
                 });
 
+            modelBuilder.Entity("Steam.Data.Entities.MediaEntity", b =>
+                {
+                    b.Navigation("GameMedia");
+
+                    b.Navigation("NewsMedia");
+                });
+
             modelBuilder.Entity("Steam.Data.Entities.NewsEntity", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("NewsComments");
+
+                    b.Navigation("NewsMedia");
                 });
 #pragma warning restore 612, 618
         }

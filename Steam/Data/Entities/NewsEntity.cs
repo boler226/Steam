@@ -8,23 +8,22 @@ namespace Steam.Data.Entities
     public class NewsEntity : BaseEntity<int>
     {
         [Required, StringLength(255)]
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
         [Required, StringLength(4000)]
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
         [Required]
         public DateTime DateOfRelease { get; set; }
-        [Required, StringLength(500)]
-        public string ImageOrVideo { get; set; }
+        public ICollection<NewsMediaEntity> NewsMedia { get; set; } = new List<NewsMediaEntity>();
         [Required]
         public int Rating { get; set; }
-        public virtual ICollection<CommentsEntity> Comments { get; set; } = new List<CommentsEntity>();
+        public virtual ICollection<NewsCommentEntity> NewsComments { get; set; } = new List<NewsCommentEntity>();
         public int? GameId { get; set; }
         [ForeignKey("GameId")]
-        public virtual GameEntity Game { get; set; }
+        public virtual GameEntity Game { get; set; } = null!;
 
         public int UserOrDeveloperId { get; set; }
-        [ForeignKey("UserId")]
-        public virtual UserEntity UserOrDeveloper { get; set; }
+        [ForeignKey("UserOrDeveloperId")]
+        public UserEntity UserOrDeveloper { get; set; } = null!;
 
     }
 }

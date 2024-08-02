@@ -7,10 +7,10 @@ namespace Steam.Data.Entities
     {
         [ForeignKey("Game")]
         public int GameId { get; set; }
-        public virtual GameEntity Game { get; set; }
+        public virtual GameEntity Game { get; set; } = null!;
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
-        public virtual CategoryEntity Category { get; set; }
+        public virtual CategoryEntity Category { get; set; } = null!;
     }
 }
