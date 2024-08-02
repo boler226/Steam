@@ -27,6 +27,7 @@ namespace Steam.Data
         public DbSet<GameMediaEntity> GameMedia { get; set; }
         public DbSet<MediaEntity> Media { get; set; }
         public DbSet<NewsEntity> News { get; set; }
+        public DbSet<UserEntity> Users {  get; set; }
         public DbSet<UserGameEntity> UserGames { get; set; }
         public DbSet<DeveloperGameEntity> DeveloperGames { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -168,12 +169,12 @@ namespace Steam.Data
 
             // DeveloperGame builder
             modelBuilder.Entity<DeveloperGameEntity>()
-                .HasKey(d => new { d.UserId, d.GameId });
+                .HasKey(d => new { d.DeveloperId, d.GameId });
 
             modelBuilder.Entity<DeveloperGameEntity>()
-                .HasOne(d => d.User)
+                .HasOne(d => d.Developer)
                 .WithMany(u => u.DevelopedGames)
-                .HasForeignKey(d => d.UserId)
+                .HasForeignKey(d => d.DeveloperId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DeveloperGameEntity>()
@@ -181,6 +182,32 @@ namespace Steam.Data
                 .WithMany()
                 .HasForeignKey(d => d.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // User builder
+            modelBuilder.Entity<UserEntity>(entity =>
+            {
+                entity.ToTable("tblUser");
+
+                entity.HasMany(e => e.UserRoles)
+                    .WithOne(ur => ur.User)
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.UserGames)
+                    .WithOne(ug => ug.User)
+                    .HasForeignKey(ug => ug.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.News)
+                    .WithOne(n => n.UserOrDeveloper) 
+                    .HasForeignKey(n => n.UserOrDeveloperId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.DevelopedGames)
+                    .WithOne(dg => dg.Developer)
+                    .HasForeignKey(dg => dg.DeveloperId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             // UserRole builder
             modelBuilder.Entity<UserRoleEntity>(ur =>

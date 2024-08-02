@@ -58,6 +58,7 @@ namespace Steam.Data
                     {
                         Email = "admin@gmail.com",
                         UserName = "SteamAdmin",
+                        Photo = "admin",
                     };
                     var result = userManager.CreateAsync(user, "123456").Result;
                     if (result.Succeeded)

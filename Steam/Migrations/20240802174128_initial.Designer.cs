@@ -12,7 +12,7 @@ using Steam.Data;
 namespace Steam.Migrations
 {
     [DbContext(typeof(AppEFContext))]
-    [Migration("20240802171848_initial")]
+    [Migration("20240802174128_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -169,13 +169,13 @@ namespace Steam.Migrations
 
             modelBuilder.Entity("Steam.Data.Entities.DeveloperGameEntity", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("DeveloperId")
                         .HasColumnType("integer");
 
                     b.Property<int>("GameId")
                         .HasColumnType("integer");
 
-                    b.HasKey("UserId", "GameId");
+                    b.HasKey("DeveloperId", "GameId");
 
                     b.HasIndex("GameId");
 
@@ -623,21 +623,21 @@ namespace Steam.Migrations
 
             modelBuilder.Entity("Steam.Data.Entities.DeveloperGameEntity", b =>
                 {
+                    b.HasOne("Steam.Data.Entities.Identity.UserEntity", "Developer")
+                        .WithMany("DevelopedGames")
+                        .HasForeignKey("DeveloperId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Steam.Data.Entities.GameEntity", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Steam.Data.Entities.Identity.UserEntity", "User")
-                        .WithMany("DevelopedGames")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Developer");
 
                     b.Navigation("Game");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Steam.Data.Entities.DiscountEntity", b =>
@@ -767,7 +767,7 @@ namespace Steam.Migrations
                     b.HasOne("Steam.Data.Entities.Identity.UserEntity", "UserOrDeveloper")
                         .WithMany("News")
                         .HasForeignKey("UserOrDeveloperId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");

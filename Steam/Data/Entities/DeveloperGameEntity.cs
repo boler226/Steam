@@ -6,9 +6,9 @@ namespace Steam.Data.Entities
     [Table("tblDeveloperGame")]
     public class DeveloperGameEntity
     {
-        public int UserId { get; set; }
-        [ForeignKey("UserId")]
-        public UserEntity User { get; set; } = null!;
+        public int DeveloperId { get; set; }
+        [ForeignKey("DeveloperId")]
+        public UserEntity Developer { get; set; } = null!;
 
         public int GameId { get; set; }
         [ForeignKey("GameId")]
