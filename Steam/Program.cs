@@ -98,6 +98,10 @@ builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddTransient<IVideoService, VideoService>();
+builder.Services.AddTransient<IMediaService, MediaService>();
+builder.Services.AddTransient<IMediaValidator, MediaValidator>();
+builder.Services.AddTransient<IVideoValidator, VideoValidator>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 
 

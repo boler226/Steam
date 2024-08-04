@@ -6,7 +6,7 @@ namespace Steam.Validators.News
 {
     public class NewsCreateViewModelValidator : AbstractValidator<NewsCreateViewModel>
     {
-        public NewsCreateViewModelValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
+        public NewsCreateViewModelValidator(IExistingEntityCheckerService checker, IMediaValidator mediaValidator) 
         {
           
 
@@ -22,12 +22,12 @@ namespace Steam.Validators.News
                 .MaximumLength(4000)
                 .WithMessage("Description cannot be longer than 4000 characters.");
 
-            RuleFor(i => i.ImageOrVideo)
+            RuleFor(i => i.Media)
                 .NotNull()
                 .WithMessage("Image or video is required.")
                 .DependentRules(() =>
                 {
-                    RuleFor(i => i.ImageOrVideo).MustAsync(imageValidator.IsValidImageAsync)
+                    RuleFor(i => i.Media).MustAsync(mediaValidator.IsValidMediaAsync)
                     .WithMessage("Image or video valid.");
                 });
         }

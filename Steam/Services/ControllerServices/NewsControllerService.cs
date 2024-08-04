@@ -12,7 +12,7 @@ namespace Steam.Services.ControllerServices
     public class NewsControllerService(
         AppEFContext context,
         IMapper mapper,
-        IImageService imageService
+        IMediaService mediaService
         ) : INewsControllerService
     {
         public async Task CreateAsync(NewsCreateViewModel model)
@@ -23,14 +23,31 @@ namespace Steam.Services.ControllerServices
             {
                 news.Title = model.Title;
                 news.Description = model.Description;
-
-                if(model.ImageOrVideo != null)
-                    //news.NewsMedia = await imageService.SaveImageAsync(model.ImageOrVideo);
-
                 news.Rating = 0;
                 news.DateOfRelease = DateTime.UtcNow;
                 news.GameId = model.GameId;
                 news.UserOrDeveloperId = model.UserOrDeveloperId;
+
+                if (model.Media != null && model.Media.Any())
+                {
+                    var imageUrls = await mediaService.SaveMediaAsync(model.Media);
+                    int priority = 1;
+
+                    var mediaEntities = imageUrls.Select(url => new MediaEntity
+                    {
+                        Name = url,
+                        Priority = priority++
+                    }).ToList();
+
+                    context.Media.AddRange(mediaEntities);
+                    await context.SaveChangesAsync();
+
+                    news.NewsMedia = mediaEntities.Select(media => new NewsMediaEntity
+                    {
+                        MediaId = media.Id, 
+                        NewsId = news.Id 
+                    }).ToList();
+                }
 
                 await context.News.AddAsync(news);
                 await context.SaveChangesAsync();

@@ -7,20 +7,23 @@ namespace Steam.Services
         IVideoValidator videoValidator
         ) : IMediaValidator
     {
-        public async Task<bool> IsValidMediaAsync(IFormFile media, CancellationToken cancellationToken)
+        public async Task<bool> IsValidMediaAsync(IEnumerable<IFormFile> mediaFiles, CancellationToken cancellationToken)
         {
-            var extension = Path.GetExtension(media.FileName).ToLowerInvariant();
+            if (mediaFiles == null)
+                return true;
 
-            if (IsImage(extension))
-            {
-                return await imageValidator.IsValidImageAsync(media, cancellationToken);
-            }
-            else if (IsVideo(extension))
-            {
-                return await videoValidator.IsValidVideoAsync(media, cancellationToken);
-            }
+            // Split media files into images and videos
+            var imageFiles = mediaFiles.Where(file => IsImage(Path.GetExtension(file.FileName).ToLowerInvariant()));
+            var videoFiles = mediaFiles.Where(file => IsVideo(Path.GetExtension(file.FileName).ToLowerInvariant()));
 
-            return false;
+            // Validate images and videos separately
+            var imageValidationTask = imageValidator.IsValidImagesAsync(imageFiles, cancellationToken);
+            var videoValidationTask = videoValidator.IsValidVideosAsync(videoFiles, cancellationToken);
+
+            var results = await Task.WhenAll(imageValidationTask, videoValidationTask);
+
+            // Check if all validations passed
+            return results.All(r => r);
         }
         private bool IsImage(string extension) => new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" }.Contains(extension);
         private bool IsVideo(string extension) => new[] { ".mp4", ".avi", ".mov", ".mkv" }.Contains(extension);
