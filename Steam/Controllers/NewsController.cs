@@ -17,9 +17,7 @@ namespace Steam.Controllers
         IValidator<NewsCreateViewModel> createValidator,
         IValidator<NewsEditViewModel> editValidator,
         IMapper mapper,
-        IImageService imageService,
         INewsControllerService service,
-        IConfiguration configuration,
         IPaginationService<NewsItemViewModel, NewsFilterViewModel> pagination
         ) : ControllerBase
     {
@@ -87,7 +85,6 @@ namespace Steam.Controllers
 
             try
             {
-                //news.NewsMedia = await imageService.SaveImageAsync(model.ImageOrVideo);
                 await service.CreateAsync(model);
                 return Ok();
             }

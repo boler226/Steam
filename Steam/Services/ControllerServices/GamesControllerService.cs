@@ -11,7 +11,7 @@ namespace Steam.Services.ControllerServices
     public class GamesControllerService(
         AppEFContext context,
         IMapper mapper,
-        IImageService imageService
+        IMediaService mediaService
         ) : IGamesControllerService
     {
         public async Task CreateAsync(GameCreateViewModel model)
@@ -27,25 +27,44 @@ namespace Steam.Services.ControllerServices
                 game.DeveloperId = model.DeveloperId;
                 game.Rating = 0;
 
+                game.DeveloperId = model.DeveloperId; // only for swager
+
                 game.SystemRequirements = new SystemRequirementsEntity
                 {
-                    OperatingSystem = model.SystemRequirements.OperatingSystem,
-                    Processor = model.SystemRequirements.Processor,
-                    RAM = model.SystemRequirements.RAM,
-                    VideoCard = model.SystemRequirements.VideoCard,
-                    DiskSpace = model.SystemRequirements.DiskSpace
+                    OperatingSystem = model.OperatingSystem,
+                    Processor = model.Processor,
+                    RAM = model.RAM,
+                    VideoCard = model.VideoCard,
+                    DiskSpace = model.DiskSpace
+                };
+
+                game.Discount = new DiscountEntity
+                {
+                    DiscountPercentage = model.DiscountPercentage ?? 0,
+                    DiscountStartDate = model.DiscountStartDate,
+                    DiscountEndDate = model.DiscountEndDate,
                 };
 
 
-                if (model.ImagesAndVideos != null && model.ImagesAndVideos.Any())
+                if (model.Media != null && model.Media.Any())
                 {
-                    foreach (var file in model.ImagesAndVideos)
+                    var imageUrls = await mediaService.SaveMediaAsync(model.Media);
+                    int priority = 1;
+
+                    var mediaEntities = imageUrls.Select(url => new MediaEntity
                     {
-                         game.GameMedia.Add(new GameMediaEntity
-                         {
-                             //Name = await imageService.SaveImageAsync(file),
-                         });
-                    }
+                        Name = url,
+                        Priority = priority++
+                    }).ToList();
+
+                    context.Media.AddRange(mediaEntities);
+                    await context.SaveChangesAsync();
+
+                    game.GameMedia = mediaEntities.Select(media => new GameMediaEntity
+                    {
+                        MediaId = media.Id,
+                        GameId = game.Id
+                    }).ToList();
                 }
 
                 if (model.Categories != null && model.Categories.Any())

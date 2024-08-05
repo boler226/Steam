@@ -6,7 +6,7 @@ namespace Steam.Validators.Games
 {
     public class GamesCreateValidator : AbstractValidator<GameCreateViewModel>
     {
-        public GamesCreateValidator(IExistingEntityCheckerService checker, IImageValidator imageValidator) 
+        public GamesCreateValidator(IExistingEntityCheckerService checker, IMediaValidator mediaValidator) 
         {
             RuleFor(i => i.Name)
                 .NotEmpty()
@@ -23,34 +23,38 @@ namespace Steam.Validators.Games
             RuleFor(i => i.Description)
                 .NotEmpty()
                     .WithMessage("Description is required.")
-                .MaximumLength(4000)
+                .MaximumLength(2000)
                     .WithMessage("Description cannot be longer than 4000 characters.");
 
-            RuleFor(i => i.SystemRequirements.OperatingSystem)
+            RuleFor(i => i.OperatingSystem)
                 .NotEmpty()
                     .WithMessage("OperatingSystem is required.")
                 .MaximumLength(255)
                     .WithMessage("OperatingSystem cannot be longer than 255 characters.");
 
-            RuleFor(i => i.SystemRequirements.Processor)
+            RuleFor(i => i.Processor)
                 .NotEmpty()
                     .WithMessage("OperatingSystem is required.")
                 .MaximumLength(255)
                     .WithMessage("OperatingSystem cannot be longer than 255 characters.");
 
-            RuleFor(i => i.SystemRequirements.RAM)
+            RuleFor(i => i.RAM)
                 .NotNull()
                     .WithMessage("RAM is required.");
 
-            RuleFor(i => i.SystemRequirements.VideoCard)
+            RuleFor(i => i.VideoCard)
                 .NotEmpty()
                     .WithMessage("VideoCard is required.")
                 .MaximumLength(255)
                     .WithMessage("VideoCard cannot be longer than 255 characters.");
 
-            RuleFor(i => i.SystemRequirements.DiskSpace)
+            RuleFor(i => i.DiskSpace)
                .NotNull()
                    .WithMessage("DiskSpace is required.");
+
+            RuleFor(i => i.DiscountPercentage)
+                .LessThanOrEqualTo(100)
+                     .WithMessage("Discount percentage cannot be more than 100.");
 
 
             RuleFor(g => g.Categories)
@@ -65,16 +69,16 @@ namespace Steam.Validators.Games
                 })
                 .WithMessage("One or more selected category ids are invalid");
 
-            RuleFor(i => i.ImagesAndVideos)
+            RuleFor(i => i.Media)
           .NotNull()
               .WithMessage("Images and videos are required.")
           .Must(files => files.Any())
               .WithMessage("At least one image or video is required.")
           .DependentRules(() =>
           {
-              RuleFor(i => i.ImagesAndVideos)
-                  .MustAsync(imageValidator.IsValidImagesAsync)
-                      .WithMessage("One or more selected images are invalid");
+              RuleFor(i => i.Media)
+                  .MustAsync(mediaValidator.IsValidMediaAsync)
+                      .WithMessage("One or more selected media are invalid");
           });
         }
     }

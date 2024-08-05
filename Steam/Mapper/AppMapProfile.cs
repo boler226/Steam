@@ -18,6 +18,7 @@ namespace Steam.Mapper
             _context = context;
 
             CreateMap<UserEntity, UserViewModel>();
+            CreateMap<RegisterViewModel, UserEntity>();
 
 
             CreateMap<CategoryEntity, CategoryItemViewModel>();
@@ -31,6 +32,9 @@ namespace Steam.Mapper
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())
                 .ForMember(dest => dest.GameMedia, opt => opt.Ignore())
                 .ForMember(dest => dest.SystemRequirements, opt => opt.Ignore());
+
+            CreateMap<NewsCreateViewModel, NewsEntity>()
+                .ForMember(dest => dest.NewsMedia, opt => opt.Ignore());
 
             CreateMap<GameEditViewModel, GameEntity>()
                 .ForMember(dest => dest.GameCategories, opt => opt.Ignore())

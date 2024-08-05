@@ -14,8 +14,7 @@ namespace Steam.Services.ControllerServices
         AppEFContext context,
         UserManager<UserEntity> userManager,
         IMapper mapper,
-        IImageService imageSercice,
-        IConfiguration configuration
+        IImageService imageSercice
         ) : IAccountsControllerService 
     {
         public async Task<UserEntity> SignUpAsync(RegisterViewModel model)
