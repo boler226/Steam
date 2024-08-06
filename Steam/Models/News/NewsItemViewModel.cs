@@ -13,8 +13,7 @@ namespace Steam.Models.News
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DateOfRelease { get; set; }
-        public string Image { get; set; }
-        public VideoGameViewModel Video { get; set; }
+        public List<MediaViewModel> Media { get; set; }
         public int Rating { get; set; }
         public List<CommentsViewModel> Comments { get; set; }
         public GameItemViewModel Game { get; set; }

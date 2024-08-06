@@ -19,7 +19,7 @@ namespace Steam.Models.Game
         public IEnumerable<CommentsViewModel> Comments { get; set; }
         // public List<UserViewModel> UserGames { get; set; }
         public IEnumerable<CategoryItemViewModel> Categories { get; set; }
-        public IEnumerable<GameImageViewModel> Images { get; set; }
+        public List<MediaViewModel> Media { get; set; }
         public IEnumerable<NewsItemViewModel> News { get; set; }
     }
 }
