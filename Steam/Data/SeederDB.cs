@@ -58,6 +58,7 @@ namespace Steam.Data
                     {
                         Email = "admin@gmail.com",
                         UserName = "SteamAdmin",
+                        Photo = "admin",
                     };
                     var result = userManager.CreateAsync(user, "123456").Result;
                     if (result.Succeeded)
@@ -69,24 +70,24 @@ namespace Steam.Data
 
                 #region Додавання категорій
 
-                //if (context.Categories.Count() < 10)
-                //{
-                //    var gameCategories = new[]
-                //    {
-                //            "Action", "Adventure", "RPG", "Strategy", "Shooter",
-                //            "Puzzle", "Racing", "Simulation", "Sports", "Fighting"
-                //        };
+                if (context.Categories.Count() < 10)
+                {
+                    var gameCategories = new[]
+                    {
+                            "Action", "Adventure", "RPG", "Strategy", "Shooter",
+                            "Puzzle", "Racing", "Simulation", "Sports", "Fighting"
+                        };
 
-                //    foreach (var categoryName in gameCategories)
-                //    {
-                //        var category = new CategoryEntity
-                //        {
-                //            Name = categoryName
-                //        };
-                //        context.Categories.Add(category);
-                //    }
-                //    context.SaveChanges();
-                //}
+                    foreach (var categoryName in gameCategories)
+                    {
+                        var category = new CategoryEntity
+                        {
+                            Name = categoryName
+                        };
+                        context.Categories.Add(category);
+                    }
+                    context.SaveChanges();
+                }
 
                 //if (context.Games.Count() < 10)
                 //{

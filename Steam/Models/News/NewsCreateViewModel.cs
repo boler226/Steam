@@ -8,7 +8,7 @@ namespace Steam.Models.News
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public IFormFile ImageOrVideo { get; set; }
+        public List<IFormFile> Media { get; set; }
         public int? GameId { get; set; }
         public int UserOrDeveloperId { get; set; }
     }
