@@ -7,11 +7,12 @@ export interface IGameItem {
     price: number;
     systemRequirements: ISystemRequirements;
     developer: IUser;
+    rating: number;
     dateOfRelease: Date;
     news: INewsItem[];
     comments: IComments[];
     categories: ICategoryItem[];
-    images: IImageItem[];
+    media: IMediaItem[];
 }
 
 export interface IGameCreate {
@@ -28,7 +29,7 @@ export interface ICategoryItem {
     name:string;
 }
 
-export interface IImageItem {
+export interface IMediaItem {
     id: number;
     name: string;
     priority: string;

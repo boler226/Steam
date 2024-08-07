@@ -57,11 +57,11 @@ const GamesListPage = () => {
                                              onMouseEnter={() => handleMouseEnter(item)}>
                                             <div className="left-card">
                                                 <Flex align='center' style={{height: '100%'}}>
-                                                    {item.images[0] && (
+                                                    {item.media[0] && (
                                                         <img
                                                             className="game-card-image"
                                                             alt={item.name}
-                                                            src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.images[0].name}`}
+                                                            src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.media[0].name}`}
                                                         />
                                                     )}
                                                     <Flex justify='space-between' align='center'
@@ -93,8 +93,7 @@ const GamesListPage = () => {
                                 <Flex vertical justify='space-around' align='start' style={{padding: '0 20px'}}>
                                     <p className="card-title-right">{game?.name}</p>
                                     <div className="card-rating">
-                                        Усі рецензії користувачів:<br/>
-                                        дуже схвальна (...)
+                                        Усі рецензії користувачів: ({game?.rating})
                                     </div>
                                     <Flex justify='space-around' gap={5} style={{padding: '10px 0', maxWidth: '260px', overflow: 'hidden'}}>
                                         {game?.categories.map((item) =>
@@ -104,7 +103,7 @@ const GamesListPage = () => {
                                         )}
                                     </Flex>
                                     <Flex vertical justify='space-around'>
-                                        {game?.images.slice(1, 5).map((item) => (
+                                        {game?.media.slice(1, 5).map((item) => (
                                             <img key={item.id} className="card-image-right" alt={item.name}
                                                  src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.name}`}/>
                                         ))}

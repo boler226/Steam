@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import {Layout, Card, Flex, Form, Checkbox, Button, Input} from 'antd';
+import {Layout, Card, Flex, Input} from 'antd';
+import { StarFilled } from '@ant-design/icons';
 import http_common from "../../../api/http_common.ts";
 import { ImageSizes } from "../../../config/config.ts";
 import { INewsItem } from "../../../interfaces/news";
@@ -17,7 +18,6 @@ const NewsListPage = () => {
     const [pageSize, setPageSize] = useState<number>(5);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [filters, setFilters] = useState<INewsFilter>({});
-    const [form] = Form.useForm();
 
     useEffect(() => {
         fetchNews(currentPage, pageSize, filters);
@@ -94,9 +94,18 @@ const NewsListPage = () => {
                                         </Flex>
                                     </div>
                                     <img className="news-card-image" alt={item.title}
-                                         src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.image}`}/>
+                                         src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.media}`}/>
                                 </Flex>
                             </Card>
+                            <Flex justify='space-between' align='flex-end' gap='small' style={{cursor: 'auto', padding: '5px 20px 5px 20px'}}>
+                                <div className="news-icons">
+                                    <StarFilled />
+                                    {item.rating}
+                                </div>
+                                <div>
+
+                                </div>
+                            </Flex>
                         </div>
                     ))}
                     <Pagination

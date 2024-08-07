@@ -1,9 +1,13 @@
+import {IComments} from "../account";
+
 export interface INewsItem {
     id: number;
     title: string;
     description: string;
     dateOfRelease: Date;
-    image: string;
+    media: string;
+    comments: IComments[];
+    rating: number;
     videoURL: string;
     game: IGameItem;
     totalCount: number;
