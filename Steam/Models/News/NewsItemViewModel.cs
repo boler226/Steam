@@ -15,6 +15,7 @@ namespace Steam.Models.News
         public DateTime DateOfRelease { get; set; }
         public List<MediaViewModel> Media { get; set; }
         public int Rating { get; set; }
+        public GameItemViewModel Game { get; set; }
         public List<CommentsViewModel> Comments { get; set; }
         public UserViewModel UserOrDeveloper { get; set; }
     }
