@@ -56,7 +56,7 @@ namespace Steam.Services.ControllerServices
                     {
                         Name = url,
                         Priority = priority++,
-                        Type = url
+                        Type = mediaService.DetermineMediaType(url)
                     }).ToList();
 
                     context.Media.AddRange(mediaEntities);
