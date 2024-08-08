@@ -43,12 +43,30 @@ namespace Steam.Services
             var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
             return imageExtensions.Contains(extension);
         }
-
         private bool IsVideo(string extension)
         {
             var videoExtensions = new[] { ".mp4", ".avi", ".mov", ".mkv", ".webm" };
             return videoExtensions.Contains(extension);
         }
+        public string DetermineMediaType(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLower();
+            return extension switch
+            {
+                ".jpg" or ".jpeg" => "jpg",
+                ".png" => "png",
+                ".gif" => "gif",
+                ".bmp" => "bmp",
+                ".webp" => "webp",
+                ".mp4" => "mp4",
+                ".avi" => "avi",
+                ".mov" => "mov",
+                ".mkv" => "mkv",
+                ".webm" => "webm",
+                _ => "unknown"
+            };
+        }
+
     }
 }
 

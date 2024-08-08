@@ -16,6 +16,8 @@ namespace Steam.Data.Entities
         public ICollection<NewsMediaEntity> NewsMedia { get; set; } = new List<NewsMediaEntity>();
         [Required]
         public int Rating { get; set; }
+        [Required]
+        public int CommentsCount { get; set; }
         public virtual ICollection<NewsCommentEntity> NewsComments { get; set; } = new List<NewsCommentEntity>();
         public int? GameId { get; set; }
         [ForeignKey("GameId")]

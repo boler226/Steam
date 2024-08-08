@@ -9,6 +9,8 @@ namespace Steam.Data.Entities
         [Required, StringLength(255)]
         public string Name { get; set; } = null!;
         public int Priority { get; set; }
+        [Required, StringLength(50)]
+        public string Type { get; set; } = null!;
 
         public ICollection<GameMediaEntity> GameMedia { get; set; } = new List<GameMediaEntity>();
         public ICollection<NewsMediaEntity> NewsMedia { get; set; } = new List<NewsMediaEntity>();
