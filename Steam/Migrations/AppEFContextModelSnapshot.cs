@@ -248,6 +248,9 @@ namespace Steam.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CommentsCount")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateOfRelease")
                         .HasColumnType("timestamp with time zone");
 
@@ -436,6 +439,11 @@ namespace Steam.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.HasKey("Id");
 
                     b.ToTable("tblMedia");
@@ -463,6 +471,9 @@ namespace Steam.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CommentsCount")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("DateOfRelease")
                         .HasColumnType("timestamp with time zone");

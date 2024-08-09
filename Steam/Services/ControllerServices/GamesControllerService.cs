@@ -26,6 +26,7 @@ namespace Steam.Services.ControllerServices
                 game.Price = model.Price;
                 game.DeveloperId = model.DeveloperId;
                 game.Rating = 0;
+                game.CommentsCount = 0;
 
                 game.DeveloperId = model.DeveloperId; // only for swager
 
@@ -54,7 +55,8 @@ namespace Steam.Services.ControllerServices
                     var mediaEntities = imageUrls.Select(url => new MediaEntity
                     {
                         Name = url,
-                        Priority = priority++
+                        Priority = priority++,
+                        Type = mediaService.DetermineMediaType(url)
                     }).ToList();
 
                     context.Media.AddRange(mediaEntities);

@@ -36,7 +36,8 @@ namespace Steam.Services.ControllerServices
                     var mediaEntities = imageUrls.Select(url => new MediaEntity
                     {
                         Name = url,
-                        Priority = priority++
+                        Priority = priority++,
+                        Type = mediaService.DetermineMediaType(url)
                     }).ToList();
 
                     context.Media.AddRange(mediaEntities);

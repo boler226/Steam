@@ -17,6 +17,8 @@ namespace Steam.Data.Entities
         public DateTime DateOfRelease { get; set; }
         [Required]
         public int Rating { get; set; }
+        [Required]
+        public int CommentsCount { get; set; }
         public ICollection<GameCommentEntity> GameComments { get; set; } = new List<GameCommentEntity>();
         [Required]
         public int DeveloperId { get; set; }
