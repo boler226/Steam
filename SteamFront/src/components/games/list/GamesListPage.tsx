@@ -1,11 +1,12 @@
 import {Flex, Layout} from "antd";
 import './style/style.css';
 import {useEffect, useState} from "react";
-import {IGameItem} from "../../../interfaces/games";
+import {IGameItem, IMediaItem} from "../../../interfaces/games";
 import {ImageSizes} from "../../../config/config.ts";
 import http_common from "../../../api/http_common.ts";
-import { IPage } from "../../../interfaces/pagination";
+import {IPage} from "../../../interfaces/pagination";
 import Pagination from "../../Pagination.tsx";
+import {filterWebpMedia} from "../../../config/MediaFilters.tsx";
 
 const { Content } = Layout;
 
@@ -16,10 +17,26 @@ const GamesListPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [images, setImages] = useState<IMediaItem[]>([]);
+
 
     useEffect(() => {
         fetchGames(currentPage, pageSize);
     }, [currentPage, pageSize]);
+
+    useEffect(() => {
+        if (data && data.length > 0)
+        {
+            setImages(filterWebpMedia(data.flatMap(item => item.media)));
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (game)
+        {
+            setImages(filterWebpMedia(game.media));
+        }
+    }, [game]);
 
     const fetchGames = (page: number, pageSize: number) => {
         http_common.get<IPage<IGameItem>>(`/api/Games/GetPage?PageIndex=${page - 1}&PageSize=${pageSize}`)
@@ -27,6 +44,7 @@ const GamesListPage = () => {
                 setData(resp.data.data);
                 console.log(resp.data.data);
                 setTotalItems(resp.data.itemsAvailable);
+
             });
     }
 
@@ -51,13 +69,14 @@ const GamesListPage = () => {
                         <Flex  justify='center' gap={25}>
                             <Flex vertical justify='start' align='center' gap={10} style={{padding: '10px 0'}}>
                                 {data && data.length > 0 && data.map((item) => (
+
                                     <div key={item.id}>
                                         <div className="card"
                                              onClick={() => handleGameClick(item)}
                                              onMouseEnter={() => handleMouseEnter(item)}>
                                             <div className="left-card">
                                                 <Flex align='center' style={{height: '100%'}}>
-                                                    {item.media[0] && (
+                                                    {images[0] && (
                                                         <img
                                                             className="game-card-image"
                                                             alt={item.name}
@@ -103,9 +122,9 @@ const GamesListPage = () => {
                                         )}
                                     </Flex>
                                     <Flex vertical justify='space-around'>
-                                        {game?.media.slice(1, 5).map((item) => (
-                                            <img key={item.id} className="card-image-right" alt={item.name}
-                                                 src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.name}`}/>
+                                        {images.slice(1, 5).map((item) => (
+                                                <img key={item.id} className="card-image-right" alt={item.name}
+                                                     src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.name}`}/>
                                         ))}
                                     </Flex>
                                 </Flex>
