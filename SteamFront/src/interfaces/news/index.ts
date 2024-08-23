@@ -1,11 +1,12 @@
 import {IComments} from "../account";
+import {IMediaItem} from "../helpers";
 
 export interface INewsItem {
     id: number;
     title: string;
     description: string;
     dateOfRelease: Date;
-    media: string;
+    media: IMediaItem[];
     comments: IComments[];
     rating: number;
     videoURL: string;

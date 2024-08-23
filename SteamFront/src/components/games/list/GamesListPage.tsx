@@ -1,7 +1,8 @@
 import {Flex, Layout} from "antd";
 import './style/style.css';
 import {useEffect, useState} from "react";
-import {IGameItem, IMediaItem} from "../../../interfaces/games";
+import {IGameItem} from "../../../interfaces/games";
+import {IMediaItem} from  "../../../interfaces/helpers";
 import {ImageSizes} from "../../../config/config.ts";
 import http_common from "../../../api/http_common.ts";
 import {IPage} from "../../../interfaces/pagination";

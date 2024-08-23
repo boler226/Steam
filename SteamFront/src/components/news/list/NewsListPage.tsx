@@ -94,7 +94,7 @@ const NewsListPage = () => {
                                         </Flex>
                                     </div>
                                     <img className="news-card-image" alt={item.title}
-                                         src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.media}`}/>
+                                         src={`http://localhost:5002/images/${ImageSizes.extraLarge}_${item.media[0].name}`}/>
                                 </Flex>
                             </Card>
                             <Flex justify='space-between' align='flex-end' gap='small' style={{cursor: 'auto', padding: '5px 20px 5px 20px'}}>

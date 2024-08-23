@@ -1,5 +1,6 @@
 import {INewsItem} from "../news";
 import {IUser, IComments} from "../account";
+import {IMediaItem} from "../helpers";
 
 export interface IGameItem {
     id: number;
@@ -27,13 +28,6 @@ export interface IGameCreate {
 export interface ICategoryItem {
     id: number;
     name:string;
-}
-
-export interface IMediaItem {
-    id: number;
-    name: string;
-    priority: string;
-    type: string;
 }
 
 export interface ISystemRequirements {
