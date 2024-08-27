@@ -33,7 +33,7 @@ const GamesListPage = () => {
     }, [data]);
 
     useEffect(() => {
-        if (game)
+        if (game && filterWebpMedia(game.media).length > 0)
         {
             setImages(filterWebpMedia(game.media));
         }
