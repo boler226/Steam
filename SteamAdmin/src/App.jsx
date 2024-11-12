@@ -1,34 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import logo from './icons/admin_logo.png';
+import burger from './icons/burger.png';
 import './App.css'
+import {useState} from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [isMenuOpen, setMenuOpen] = useState(true);
+
+    const toggleMenu = () => {
+        setMenuOpen(!isMenuOpen);
+    };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <Router>
+          <body>
+          <header className="header">
+              <button className="burger" onClick={toggleMenu}>
+                  <img src={burger} alt="menu" className="burger-icon" />
+              </button>
+              <img src={logo} alt="logo" className="logo-icon"/>
+          </header>
+
+          <nav className={`vertical-nav ${isMenuOpen ? 'nav--open' : ''}`}>
+              <ul className="nav-list">
+                  <li className="nav-item">
+                      <a href="#">Some item</a>
+                  </li>
+                  <li className="nav-item">
+                      <a href="#">Some item</a>
+                  </li>
+                  <li className="nav-item">
+                      <a href="#">Some item</a>
+                  </li>
+                  <li className="nav-item">
+                      <a href="#">Some item</a>
+                  </li>
+              </ul>
+          </nav>
+          <main>
+
+          </main>
+          <footer>
+
+          </footer>
+          </body>
+      </Router>
   )
 }
 
